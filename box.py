@@ -27,9 +27,16 @@ class BoxSizeAnimator(AbstractAnimator):
         return X, Y
 
 def main():
-    animator = BoxSizeAnimator(interval=5, size=50, factor=-0.05, toggle=True)
-    animator.animate(500)
-    animator.save("out/box.mp4")
+    animator = BoxSizeAnimator(
+        interval=5,
+        size=50,
+        factor=-0.05,
+        toggle=True,
+        line_width=3,
+        title='Phasing Out - Paradox'
+    )
+    animator.animate(2100)
+    animator.save("out/box2.mp4")
 
 if __name__ == "__main__":
     main()

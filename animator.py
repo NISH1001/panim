@@ -19,7 +19,10 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.fig.set_size_inches(13.66, 7.68, True)
         n = 50
         self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))
-        self.img, = self.ax.plot([], [], lw=2)
+        line_width = args.get('line_width', 2)
+        self.img, = self.ax.plot([], [], lw=line_width)
+        if 'title' in args:
+            plt.title(args['title'])
 
     @abstractmethod
     def _update(self, i):
