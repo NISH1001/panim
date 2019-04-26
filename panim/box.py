@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from animator import AbstractAnimator
+from panim.animator import AbstractAnimator
 
 plt.style.use('dark_background')
 
