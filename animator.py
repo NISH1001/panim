@@ -16,7 +16,9 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.args = args
         self.interval = args.get('interval', 1)
         self.fig = plt.figure()
-        self.ax = plt.axes(xlim=(-50, 50), ylim=(-50, 50))
+        self.fig.set_size_inches(13.66, 7.68, True)
+        n = 50
+        self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))
         self.img, = self.ax.plot([], [], lw=2)
 
     @abstractmethod
@@ -36,8 +38,11 @@ class AbstractAnimator(metaclass=ABCMeta):
                                frames=num_frames, interval=self.interval, blit=True,
                                repeat=False)
 
-    def save(self, filename="out/animation.mp4"):
-        self.anim.save(filename, writer='imagemagick')
+    def save(self, filename="out/animation.mp4", fps=30, dpi=100):
+        writer = animation.writers['ffmpeg'](fps=fps)
+        # self.anim.save(filename, writer='imagemagick')
+        self.anim.save(filename, writer=writer, dpi=dpi)
+        print("Saving {} to {}".format(self.__class__.__name__, filename))
 
 
 def main():
