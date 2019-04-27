@@ -16,7 +16,7 @@ class BoxSizeAnimator(AbstractAnimator):
         self.factor = args['factor']
         self.coords = np.array([(-1, -1), (-1, 1), (1, 1), (1, -1), (-1, -1)])
 
-    def _update(self, i):
+    def update(self, i):
         coords = self.coords * self.size * self.val
         X, Y = zip(*coords)
         self.val += self.factor

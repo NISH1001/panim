@@ -14,7 +14,7 @@ class SpiralAnimator(AbstractAnimator):
         self.factor = self.args.get('factor', 0.1)
         self.rotation= 1 if self.clockwise else -1
 
-    def _update(self, i):
+    def update(self, i):
         t = self.factor * i * self.rotation
 
         # x, y values to be plotted

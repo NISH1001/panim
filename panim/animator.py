@@ -25,17 +25,18 @@ class AbstractAnimator(metaclass=ABCMeta):
             plt.title(args['title'])
 
     @abstractmethod
-    def _update(self, i):
+    def update(self, i):
         # Do something and return X, Y
         pass
 
     def _animate(self, i):
-        print("Frame number :: {}".format(i))
-        X, Y = self._update(i)
+        print("Frame {}/{}".format(i, self.num_frames))
+        X, Y = self.update(i)
         self.img.set_data(X, Y)
         return [self.img]
 
     def animate(self, num_frames=1000):
+        self.num_frames = num_frames
         plt.axis('off')
         self.anim = animation.FuncAnimation(self.fig, self._animate,
                                frames=num_frames, interval=self.interval, blit=True,
