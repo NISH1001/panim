@@ -16,10 +16,11 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.args = args
         self.interval = args.get('interval', 1)
         self.fig = plt.figure()
-        self.fig.set_size_inches(13.66, 7.68, True)
+        # self.fig.set_size_inches(13.66, 7.68, True)
+        # self.fig.set_size_inches(8, 6, True)
         n = 50
         self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))
-        line_width = args.get('line_width', 2)
+        line_width = args.get('line_width', 1)
         self.img, = self.ax.plot([], [], lw=line_width)
         if 'title' in args:
             plt.title(args['title'])
