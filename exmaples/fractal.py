@@ -27,7 +27,14 @@ def main():
         'F': 'FF[++F][-FF]'
     }
 
-    axiom = 'F'
+    angle = 22.5
+    iteration = 4
+    rule = {
+        'F': 'FF',
+        'A': 'F[+AF-[A]--A][---A]'
+    }
+
+    axiom = 'A'
 
     animator = BranchedLSystemAnimator(
         interval=20,

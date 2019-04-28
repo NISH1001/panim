@@ -134,15 +134,15 @@ class BranchedLSystem(LSystem):
         for symbol in sequence:
             x, y, angle = state
 
-            # if symbol.lower() in 'abcdefghij':
-            if symbol in 'Ff':
+            if symbol.lower() in 'abcdefghij':
+            # if symbol in 'Ff':
                 state = (x - np.cos(angle * DEGREES_TO_RADIANS),
                         y + np.sin(angle * DEGREES_TO_RADIANS),
                         angle)
 
                 # Add a break in the line if symbol matches a-j
-                if symbol == 'f':
-                # if symbol.islower():
+                # if symbol == 'f':
+                if symbol.islower():
                     yield (float('nan'), float('nan'))
 
                 yield (state[0], state[1])
