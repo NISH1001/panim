@@ -90,8 +90,7 @@ class LSystem:
                         angle)
 
                 if symbol == 'f':
-                    # Insert a break in the path so that
-                    # this line segment isn't drawn.
+                    # Insert a break in the path to not draw the line
                     yield (float('nan'), float('nan'))
 
                 yield (state[0], state[1])
@@ -107,8 +106,8 @@ class LSystem:
                 # yield (x, y)
 
     def __str__(self):
-        return "Axiom={}\nRule={}\nTurn Angle={}\nIterations={}\nFinal Sequence Length={}".format(
-            self.axiom, self.rule, self.turn_angle, self.iteration, len(self.seq)
+        return "Axiom={}\nRule={}\nTurn Angle={}\nIterations={}\nFinal Sequence Length={}\nStart Position={}".format(
+            self.axiom, self.rule, self.turn_angle, self.iteration, len(self.seq), self.start_position
         )
 
 class BranchedLSystem(LSystem):
@@ -123,7 +122,9 @@ class BranchedLSystem(LSystem):
             + : rotate clockwise without moving forward
             - : rotate counter-clockwise without moving forward
             [ : push (save) state (position and angle)
+                (kind of: "remember 'this'")
             ] : pop state (position and angle)
+                (kind of: "go back to that last remember state")
 
     """
     def simulate_turtle(self, sequence, start_position, turn_angle):
@@ -173,7 +174,14 @@ class LSystemAnimator(AbstractAnimator):
         rule = args.get('rule', {'F': 'FfF++'})
         turn_angle = args.get('turn_angle', 45.0)
         iteration = args.get('iteration', 15)
-        self.lsystem = LSystem(axiom=axiom, rule=rule, turn_angle=turn_angle, iteration=iteration)
+        start_position = args.get('start_position', (0.0, 0.0))
+        self.lsystem = LSystem(
+            axiom=axiom,
+            rule=rule,
+            turn_angle=turn_angle,
+            iteration=iteration,
+            start_position=start_position
+        )
         self.coords = [ c for c in self.lsystem.invoke() ]
         print(self.lsystem)
 
@@ -181,7 +189,7 @@ class LSystemAnimator(AbstractAnimator):
         return zip(*self.coords[:i+1])
 
 
-class BranchedLSystemAnimator(AbstractAnimator):
+class BranchedLSystemAnimator(LSystemAnimator):
     def __init__(self, **args):
         super().__init__(**args)
         # self.program = args.get('program', 'FfF++FfF++FfF++FfF')
@@ -189,12 +197,16 @@ class BranchedLSystemAnimator(AbstractAnimator):
         rule = args.get('rule', {'F': 'FfF++'})
         turn_angle = args.get('turn_angle', 45.0)
         iteration = args.get('iteration', 15)
-        self.lsystem = BranchedLSystem(axiom=axiom, rule=rule, turn_angle=turn_angle, iteration=iteration)
+        start_position = args.get('start_position', (0.0, 0.0))
+        self.lsystem = BranchedLSystem(
+            axiom=axiom,
+            rule=rule,
+            turn_angle=turn_angle,
+            iteration=iteration,
+            start_position=start_position
+        )
         self.coords = [ c for c in self.lsystem.invoke() ]
         print(self.lsystem)
-
-    def update(self, i):
-        return zip(*self.coords[:i+1])
 
 
 def main():
