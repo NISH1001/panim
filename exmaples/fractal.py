@@ -69,6 +69,25 @@ def draw_simple_tree():
     animator.animate(len(animator.coords))
     animator.save("out/tree.mp4")
 
+def draw_dragoncurve():
+    angle = 90
+    iteration = 11
+    rule = {
+        'X': 'X+YF+',
+        'Y': '-FX-Y'
+    }
+    axiom = 'FX'
+    animator = BranchedLSystemAnimator(
+        interval=20,
+        iteration=iteration,
+        rule=rule,
+        axiom=axiom,
+        turn_angle=angle,
+        start_position=(-20, 0)
+    )
+    animator.animate(len(animator.coords))
+    animator.save("out/dragoncurve.mp4")
+
 
 def test():
     angle = 30
@@ -88,10 +107,10 @@ def test():
     animator.save("out/test.mp4")
 
 def main():
-    draw_wheat()
+    # draw_wheat()
     # draw_binary_fractal_tree()
+    draw_dragoncurve()
 
 
 if __name__ == "__main__":
     main()
-
