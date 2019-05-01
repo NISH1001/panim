@@ -88,6 +88,25 @@ def draw_dragoncurve():
     animator.animate(len(animator.coords))
     animator.save("out/dragoncurve.mp4")
 
+def draw_sierpinski():
+    angle = 60
+    iteration = 6
+    rule = {
+        'A' : 'B−A−B',
+        'B' : 'A+B+A'
+    }
+    axiom = 'A'
+    animator = BranchedLSystemAnimator(
+        interval=20,
+        iteration=iteration,
+        rule=rule,
+        axiom=axiom,
+        turn_angle=angle
+        # start_position=(-20, 0)
+    )
+    animator.animate(len(animator.coords))
+    animator.save("out/sierpinski.mp4")
+
 
 def test():
     angle = 30
@@ -106,10 +125,55 @@ def test():
     animator.animate(len(animator.coords))
     animator.save("out/test.mp4")
 
+def test2():
+    # http://www.motionesque.com/beautyoffractals/#!
+    angle = 45
+    iteration = 4
+
+    rule = {
+        'F' : 'F- – -F+F+F+F+F+F+F- – -F'
+    }
+    axiom = 'F-F-F-F-F-F-F-F'
+
+
+    rule = {
+        'F' : 'F+F- -F+F'
+    }
+    axiom = 'F++F++F'
+
+    # 2
+    angle = 40
+    iteration = 2
+    rule = {
+        'F': 'F---F+F+F+F+F+F+F---F'
+    }
+    axiom = 'F+F+F+F+F+F+F+F+F'
+
+    # 6
+    angle = 72
+    iteration = 3
+    rule = {
+        'F' : 'F-F+F+F+F--F'
+    }
+    axiom = 'F+F+F+F+F'
+
+    animator = LSystemAnimator(
+        interval=20,
+        iteration=iteration,
+        rule=rule,
+        axiom=axiom,
+        turn_angle=angle,
+        start_position=(-25, 0)
+    )
+    animator.animate(len(animator.coords))
+    animator.save("out/test.mp4")
+
 def main():
     # draw_wheat()
     # draw_binary_fractal_tree()
-    draw_dragoncurve()
+    # draw_dragoncurve()
+    # draw_sierpinski()
+    test2()
 
 
 if __name__ == "__main__":

@@ -18,7 +18,7 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.fig = plt.figure()
         # self.fig.set_size_inches(13.66, 7.68, True)
         # self.fig.set_size_inches(8, 6, True)
-        n = 50
+        n = 75
         self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))
         line_width = args.get('line_width', 1)
         self.img, = self.ax.plot([], [], lw=line_width)
