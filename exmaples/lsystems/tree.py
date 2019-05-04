@@ -2,6 +2,7 @@
 
 
 import sys
+import time
 from pathlib import Path
 
 path = str(Path().absolute())
@@ -13,26 +14,26 @@ from panim.lsystem import (
     BranchedLSystemAnimator
 )
 
-def draw_binary_fractal_tree():
+def binary_fractal_tree():
     angle = 45
-    iteration = 6
+    iteration = 7
     axiom = 'A'
     rule = {
         'A': 'F[+A]-A',
         'F': 'FF'
     }
     animator = BranchedLSystemAnimator(
-        interval=20,
+        interval=5,
         iteration=iteration,
         rule=rule,
         axiom=axiom,
         turn_angle=angle,
-        start_position=(0, -50)
+        start_position=(0, -60)
     )
     animator.animate(len(animator.coords))
-    animator.save("out/binary-fractal-tree.mp4")
+    animator.save("out/trees/binary-fractal-tree.mp4")
 
-def draw_wheat():
+def wheat():
     angle = 22.5
     iteration = 5
     rule = {
@@ -50,7 +51,7 @@ def draw_wheat():
         start_position=(0,-50)
     )
     animator.animate(len(animator.coords))
-    animator.save("out/wheat.mp4")
+    animator.save("out/trees/wheat.mp4")
 
 def draw_simple_tree():
     angle = 22
@@ -69,111 +70,99 @@ def draw_simple_tree():
     animator.animate(len(animator.coords))
     animator.save("out/tree.mp4")
 
-def draw_dragoncurve():
-    angle = 90
-    iteration = 11
+def tree1():
+    angle = 25.7
+    axiom = 'Y'
     rule = {
-        'X': 'X+YF+',
-        'Y': '-FX-Y'
+        'X': 'X[-FFF][+FFF]FX',
+        'Y': 'YFX[+Y][-Y]'
     }
-    axiom = 'FX'
-    animator = BranchedLSystemAnimator(
-        interval=20,
-        iteration=iteration,
-        rule=rule,
-        axiom=axiom,
-        turn_angle=angle,
-        start_position=(-20, 0)
-    )
-    animator.animate(len(animator.coords))
-    animator.save("out/dragoncurve.mp4")
-
-def draw_sierpinski():
-    angle = 60
     iteration = 6
-    rule = {
-        'A' : 'B−A−B',
-        'B' : 'A+B+A'
-    }
-    axiom = 'A'
     animator = BranchedLSystemAnimator(
-        interval=20,
-        iteration=iteration,
-        rule=rule,
-        axiom=axiom,
-        turn_angle=angle
-        # start_position=(-20, 0)
-    )
-    animator.animate(len(animator.coords))
-    animator.save("out/sierpinski.mp4")
-
-
-def test():
-    angle = 30
-    iteration = 4
-    rule = {
-        'F': 'F[-F][+F]'
-    }
-    axiom = 'F'
-    animator = BranchedLSystemAnimator(
-        interval=20,
-        iteration=iteration,
-        rule=rule,
-        axiom=axiom,
-        turn_angle=angle
-    )
-    animator.animate(len(animator.coords))
-    animator.save("out/test.mp4")
-
-def test2():
-    # http://www.motionesque.com/beautyoffractals/#!
-    angle = 45
-    iteration = 4
-
-    rule = {
-        'F' : 'F- – -F+F+F+F+F+F+F- – -F'
-    }
-    axiom = 'F-F-F-F-F-F-F-F'
-
-
-    rule = {
-        'F' : 'F+F- -F+F'
-    }
-    axiom = 'F++F++F'
-
-    # 2
-    angle = 40
-    iteration = 2
-    rule = {
-        'F': 'F---F+F+F+F+F+F+F---F'
-    }
-    axiom = 'F+F+F+F+F+F+F+F+F'
-
-    # 6
-    angle = 72
-    iteration = 3
-    rule = {
-        'F' : 'F-F+F+F+F--F'
-    }
-    axiom = 'F+F+F+F+F'
-
-    animator = LSystemAnimator(
-        interval=20,
+        interval=5,
         iteration=iteration,
         rule=rule,
         axiom=axiom,
         turn_angle=angle,
-        start_position=(-25, 0)
+        start_position=(0, -70),
+        nlimit=75
     )
     animator.animate(len(animator.coords))
-    animator.save("out/test.mp4")
+    animator.save("out/trees/tree1.mp4")
+
+def tree2():
+    angle = 22.5
+    axiom = 'F'
+    rule = {
+        'F': ' FF+[+F-F-F]-[-F+F+F]'
+    }
+    iteration = 4
+    animator = BranchedLSystemAnimator(
+        interval=5,
+        iteration=iteration,
+        rule=rule,
+        axiom=axiom,
+        turn_angle=angle,
+        start_position=(0, -30),
+        nlimit=40
+    )
+    animator.animate(len(animator.coords))
+    animator.save("out/trees/tree2.mp4")
+
+def tree3():
+    angle = 35
+    axiom = 'F'
+    rule = {
+        'F': 'F[+FF][-FF]F[-F][+F]F'
+    }
+    iteration = 4
+    animator = BranchedLSystemAnimator(
+        interval=5,
+        iteration=iteration,
+        rule=rule,
+        axiom=axiom,
+        turn_angle=angle,
+        start_position=(0, -40),
+        nlimit=60
+    )
+    animator.animate(len(animator.coords))
+    animator.save("out/trees/tree3.mp4")
+
+def tree4():
+    angle = 20
+    axiom = 'VZFFF'
+    rule = {
+        'V': '[+++W][---W]YV',
+        'W': '+X[-W]Z',
+        'X': '-W[+X]Z',
+        'Y': 'YZ',
+        'Z': '[-FFF][+FFF]F'
+
+    }
+    iteration = 8
+    animator = BranchedLSystemAnimator(
+        interval=5,
+        iteration=iteration,
+        rule=rule,
+        axiom=axiom,
+        turn_angle=angle,
+        start_position=(0, 0),
+        nlimit=30
+    )
+    animator.animate(len(animator.coords))
+    animator.save("out/trees/tree4.mp4")
+
 
 def main():
-    # draw_wheat()
-    # draw_binary_fractal_tree()
-    # draw_dragoncurve()
-    # draw_sierpinski()
-    test2()
+    start = time.time()
+    # wheat()
+    # binary_fractal_tree()
+    # tree1()
+    # tree2()
+    # tree3()
+    tree4()
+    end = time.time()
+    print("Time Taken :: {} seconds".format(end-start))
 
 
 if __name__ == "__main__":

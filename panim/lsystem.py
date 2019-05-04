@@ -105,6 +105,10 @@ class LSystem:
                 state = (x, y, angle - turn_angle)
                 # yield (x, y)
 
+            elif symbol == '|':
+                state = (x, y, angle - 180)
+                # yield (x, y)
+
     def __str__(self):
         return "Axiom={}\nRule={}\nTurn Angle={}\nIterations={}\nFinal Sequence Length={}\nStart Position={}".format(
             self.axiom, self.rule, self.turn_angle, self.iteration, len(self.seq), self.start_position
