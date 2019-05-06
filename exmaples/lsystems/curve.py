@@ -330,6 +330,33 @@ def tiles():
     animator.animate(len(animator.coords))
     animator.save("out/curves/tiles.mp4")
 
+def spiral():
+    """
+        Generate spirals using L-System rules
+    """
+    rule = {
+        'X': 'XF',
+        'Y': 'Y+XF+XF'
+    }
+    axiom = '-Y'
+    # change angle to generate non-square spirals
+    # 90 -> Square
+    angle = 90
+    iteration = 75
+    n = 40
+
+    animator = LSystemAnimator(
+        interval=1,
+        iteration=iteration,
+        rule=rule,
+        axiom=axiom,
+        turn_angle=angle,
+        # start_position=(-n//2+10, -10),
+        nlimit=n,
+    )
+    animator.animate(len(animator.coords))
+    animator.save("out/curves/spiral.mp4", fps=60)
+
 def main():
     start = time.time()
     # hilbert()
@@ -343,7 +370,8 @@ def main():
     # quadratic_koch()
     # sierpinski_arrowhead()
     # pentaplexity()
-    tiles()
+    # tiles()
+    spiral()
     end = time.time()
     print("Time Taken :: {} seconds".format(end-start))
 
