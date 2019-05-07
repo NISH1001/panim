@@ -15,8 +15,7 @@ from panim.transformers import ZoomTransformer
 
 plt.style.use('dark_background')
 
-
-def main():
+def hilbert():
     angle = 90
     axiom = 'L'
     rule = {
@@ -38,6 +37,36 @@ def main():
     zoomer = ZoomTransformer(animobj=animator, factor=500)
     zoomer.animate(len(animator.coords))
     zoomer.save("out/hilbert.mp4")
+
+def test():
+    rule = {
+        'F': 'FF+F-F+F+FF'
+    }
+    axiom = 'F+F+F+F'
+    angle = 90
+    iteration = 3
+    n = 75
+
+    animator = LSystemAnimator(
+        interval=5,
+        iteration=iteration,
+        rule=rule,
+        axiom=axiom,
+        turn_angle=angle,
+        # start_position=(0, -10),
+        # nlimit=n,
+    )
+
+    zoomer = ZoomTransformer(
+        animobj=animator,
+        factor=500,
+        nlimit=n)
+    zoomer.animate(len(animator.coords))
+    zoomer.save("out/zoom-test.mp4")
+
+
+def main():
+    test()
 
 if __name__ == "__main__":
     main()
