@@ -15,8 +15,8 @@ from panim.rain import RainAnimator
 
 
 def main():
-    r = RainAnimator()
-    r.animate(500)
+    r = RainAnimator(ndrops = 150)
+    r.animate(2000)
     r.save("out/rain.mp4")
 
 if __name__ == "__main__":

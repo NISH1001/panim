@@ -10,11 +10,11 @@ plt.style.use('dark_background')
 
 class RainAnimator:
     def __init__(self, **args):
-        super().__init__(**args)
+        # super().__init__(**args)
         ndrops = args.get('ndrops', 50)
         self.interval = args.get('interval', 10)
         # Create new Figure and an Axes which fills it.
-        self.fig = plt.figure(figsize=(7, 7))
+        self.fig = plt.figure(figsize=(13, 7))
         self.ax = self.fig.add_axes([0, 0, 1, 1], frameon=False)
         self.ax.set_xlim(0, 1), self.ax.set_xticks([])
         self.ax.set_ylim(0, 1), self.ax.set_yticks([])
