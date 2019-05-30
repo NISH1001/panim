@@ -9,6 +9,11 @@ from panim.animator import AbstractAnimator
 plt.style.use('dark_background')
 
 class RainAnimator:
+    """
+        I directly copied (and modified this code from Matplotlib's official documentation).
+        So yeah! I haven't been able to hook up AbstractAnimator here since that used plt.plot.
+        Here, it requires scatter plot.
+    """
     def __init__(self, **args):
         # super().__init__(**args)
         ndrops = args.get('ndrops', 50)
