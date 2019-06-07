@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 from panim.animator import AbstractAnimator
 
-plt.style.use('dark_background')
+# plt.style.use('dark_background')
+plt.xkcd()
 
 DEGREES_TO_RADIANS = np.pi / 180
 
@@ -28,6 +29,7 @@ class LSystem:
             f : move 1 unit forward without tracing a line
             + : rotate clockwise without moving forward
             - : rotate counter-clockwise without moving forward
+            | : rotate by 180 degree
 
     """
     def __init__(self, axiom, rule, turn_angle=45.0, start_position=(0.0, 0.0), iteration=5):
