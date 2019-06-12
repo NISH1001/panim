@@ -11,18 +11,29 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('dark_background')
 
-from panim.spiral import SpiralAnimator
+from panim.spiral import SpiralAnimator, SpiralAnimator2
 from panim.transformers import ZoomTransformer
 
 
 def main():
-    n = 800
+    n = 25
     animator = SpiralAnimator(
-        interval=1,
+        interval=50,
         clockwise=False,
         factor=0.1,
         nlimit=n
     )
+    animator = SpiralAnimator2(
+        interval=50,
+        scale=0.4,
+        nlimit=n,
+        npoints=50,
+        rot_factor=0.008
+    )
+    animator.animate(1000)
+    animator.save("out/spiral2.mp4")
+    return
+
     zoomer = ZoomTransformer(
         animobj=animator,
         factor=2000,

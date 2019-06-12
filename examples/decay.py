@@ -19,9 +19,9 @@ from panim.decay import ExponentialDecay
 def main():
     n = 800
     animator = ExponentialDecay(
-        nlimit=30
+        nlimit=40
     )
-    animator.animate(5500)
+    animator.animate(7200)
     animator.save("out/decay.mp4")
 
 if __name__ == "__main__":
