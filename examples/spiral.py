@@ -28,9 +28,9 @@ def main():
         scale=0.4,
         nlimit=n,
         npoints=50,
-        rot_factor=0.008
+        rot_factor=0.001
     )
-    animator.animate(1000)
+    animator.animate(9000)
     animator.save("out/spiral2.mp4")
     return
 
