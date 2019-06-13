@@ -17,7 +17,7 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.interval = args.get('interval', 1)
         self.fig = plt.figure()
         # self.fig.set_size_inches(13.66, 7.68, True)
-        # self.fig.set_size_inches(8, 6, True)
+        self.fig.set_size_inches(8, 6, True)
         self.nlimit = args.get('nlimit', 50)
         n = self.nlimit
         self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))

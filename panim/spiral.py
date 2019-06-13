@@ -25,23 +25,19 @@ class SpiralAnimator(AbstractAnimator):
         X, Y = zip(*self.coords)
         return X, Y
 
-class SpiralAnimator2(AbstractAnimator):
+class SpiralAnimator2(SpiralAnimator):
     def __init__(self, **args):
         super().__init__(**args)
         self.clockwise = self.args.get('clockwise', True)
-        self.rot_factor = self.args.get('rot_factor', 0.01)
         self.scale = self.args.get('scale', 0.4)
         self.npoints = self.args.get('npoints', 25)
         self.a = np.arange(1, self.npoints)
-        self.b = 0
 
     def update(self, i):
-
-        # x, y = t*np.sin(t), t*np.cos(t)
+        # self.b = i * self.rot_factor
+        self.b =  i * self.factor
         X = (np.sin(self.a * self.b) * self.a * self.scale).tolist()
-        Y = (np.cos(self.a * self.b) * self.a * self.scale).tolist()
-        self.b += self.rot_factor
-
+        Y = (self.rotation * np.cos(self.a * self.b) * self.a * self.scale).tolist()
         return X, Y
 
 
