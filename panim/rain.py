@@ -62,7 +62,7 @@ class RainAnimator:
         self.num_frames = num_frames
         plt.axis('off')
         self.anim = animation.FuncAnimation(self.fig, self.update,
-                               frames=num_frames, interval=self.interval, blit=False,
+                               frames=num_frames, interval=self.interval, blit=True,
                                repeat=False)
 
     def save(self, filename="out/animation.mp4", fps=30, dpi=100):
