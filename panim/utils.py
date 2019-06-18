@@ -23,19 +23,31 @@ def meshgrid_polar(shape, center=None, dist=L2):
     return dist(x, y), np.arctan2(x, y)
 
 def imnormalize(im):
-    im-=np.min(im)
-    M=np.max(im)
-    if M>0: im=im*255/M
+    im -= np.min(im)
+    M = np.max(im)
+    if M>0:
+        im = im*255/M
     return im
 
 def imshow(im,normalize=True):
-    if len(im.shape)==2:
-        if normalize: im=imnormalize(im)
-        im=np.float32(im)
-    if len(im.shape)==3 and im.shape[2]==3:
-        im=np.uint8(im)
-    im=Image.fromarray(im)
+    if len(im.shape) == 2:
+        if normalize:
+            im = imnormalize(im)
+        im = np.float32(im)
+    if len(im.shape) == 3 and im.shape[2] == 3:
+        im = np.uint8(im)
+    im = Image.fromarray(im)
     im.show()
+
+def get_image_array(img, normalize=True):
+    if len(img.shape) == 2:
+        if normalize:
+            img = imnormalize(img)
+        img = np.float32(img)
+    if len(img.shape) ==3 and img.shape[2] == 3:
+        img = np.uint8(img)
+    return img
+    # return Image.fromarray(img)
 
 
 def main():

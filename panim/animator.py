@@ -47,16 +47,18 @@ class AbstractAnimator(metaclass=ABCMeta):
     def save(self, filename="out/animation.mp4", fps=30, dpi=100):
         writer = animation.writers['ffmpeg'](fps=fps)
         # self.anim.save(filename, writer='imagemagick')
-        self.anim.save(filename, writer=writer, dpi=dpi)
         print("Saving {} to {}".format(self.__class__.__name__, filename))
+        self.anim.save(filename, writer=writer, dpi=dpi)
 
-class AbstractImageAnimator(metaclass=ABCMeta):
+class AbstractImageAnimator(AbstractAnimator):
     def __init__(self, **args):
         self.args = args
         self.interval = args.get('interval', 1)
         self.fig = plt.figure()
-        # self.fig.set_size_inches(13.66, 7.68, True)
-        self.fig.set_size_inches(8, 6, True)
+        self.image_size = (args.get('width', 800), args.get('height', 600))
+        w, h = self.image_size
+        self.fig.set_size_inches(w/100, h/100, True)
+        self.ax = plt.axes(xlim=(0, w), ylim=(0, h))
         self.images = []
 
     @abstractmethod
@@ -64,9 +66,15 @@ class AbstractImageAnimator(metaclass=ABCMeta):
         # Do something and return X, Y
         pass
 
+    def _animate(self, n):
+        for i in range(n):
+            print("Frame {}/{}".format(i, self.num_frames))
+            self.update(i)
+
     def animate(self, num_frames=1000):
+        plt.axis('off')
         self.num_frames = num_frames
-        self.update(num_frames)
+        self._animate(num_frames)
         self.anim = animation.ArtistAnimation(
             self.fig, self.images,
             interval=self.interval, blit=True,
@@ -76,8 +84,8 @@ class AbstractImageAnimator(metaclass=ABCMeta):
     def save(self, filename="out/animation.mp4", fps=30, dpi=100):
         writer = animation.writers['ffmpeg'](fps=fps)
         # self.anim.save(filename, writer='imagemagick')
-        self.anim.save(filename, writer=writer, dpi=dpi)
         print("Saving {} to {}".format(self.__class__.__name__, filename))
+        self.anim.save(filename, writer=writer, dpi=dpi)
 
 
 
