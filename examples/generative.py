@@ -22,8 +22,8 @@ def main():
         width=640,
         height=320
     )
-    animator.animate(2500)
-    animator.save("out/generative.mp4", fps=7)
+    animator.animate(2000)
+    animator.save("out/generative2.mp4", fps=7)
 
 if __name__ == "__main__":
     main()
