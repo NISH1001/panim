@@ -13,7 +13,9 @@ plt.style.use('dark_background')
 
 from panim.generative import (
     GenerativeArt,
-    GenerativeArt2
+)
+from panim.flow import (
+    FlowAnimator
 )
 from panim.transformers import ZoomTransformer
 
@@ -23,14 +25,13 @@ def main():
     #     width=640,
     #     height=320
     # )
-    animator = GenerativeArt2(
+    animator = FlowAnimator(
         nlines = 75,
         npoints = 90,
         perspective=150
     )
-    animator.animate(100)
-    animator.save("out/generative2-0.mp4", fps=24)
+    animator.animate(1000)
+    animator.save("out/flow.mp4", fps=24)
 
 if __name__ == "__main__":
     main()
-
