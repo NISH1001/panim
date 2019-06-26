@@ -17,7 +17,8 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.interval = args.get('interval', 1)
         self.fig = plt.figure()
         # self.fig.set_size_inches(13.66, 7.68, True)
-        self.fig.set_size_inches(8, 6, True)
+        w, h = args.get('width', 8), args.get('height', 6)
+        self.fig.set_size_inches(w, h, True)
         self.nlimit = args.get('nlimit', 50)
         n = self.nlimit
         self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))
@@ -25,6 +26,9 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.img, = self.ax.plot([], [], lw=line_width)
         if 'title' in args:
             plt.title(args['title'])
+
+    def setup(self, *args):
+        pass
 
     @abstractmethod
     def update(self, i):
