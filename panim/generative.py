@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 
 import numpy as np
+from scipy.ndimage.filters import gaussian_filter
+
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import random
 
-from panim.animator import AbstractImageAnimator, AbstractAnimator
+from panim.animator import (
+    AbstractImageAnimator,
+    AbstractImageAnimator3,
+    AbstractAnimator
+)
 from panim.utils import (
     meshgrid_polar,
     get_image_array
@@ -33,55 +39,42 @@ class GenerativeArt(AbstractImageAnimator):
         im = self.ax.imshow(im, animated=True, cmap='gray')
         self.images.append([im])
 
-class FlowAnimator(AbstractAnimator):
-    """
-        This generate random hill-like stack of lines the height of which are animated.
-        The result is more like a flowing hills.
-    """
+class GenerativeArt2(AbstractImageAnimator):
     def __init__(self, **args):
         super().__init__(**args)
-        self.fig = plt.figure(figsize=(13.68, 7.2), facecolor='black')
-        self.ax = plt.subplot(111, frameon=False)
-
-        self.nlines = args.get('nlines', 70)
-        self.npoints = args.get('npoints', 80)
-        self.perspective = args.get('perspective', 150)
-        self.setup()
-
-    def setup(self, *args):
-        # random Y points
-        self.data = np.random.uniform(0, 1, (self.nlines, self.npoints))
-        X = np.linspace(-1, 1, self.data.shape[-1])
-
-        # gravity for the hills
-        self.G = 2.5 * np.exp(-4 * X ** 2)
-        self.val = 1
-
-        self.lines = []
-        for i in range(len(self.data)):
-            # small reduction of the X extents to get a cheap perspective effect
-            xscale = 1 - i / self.perspective
-            # same for linewidth (thicker strokes on bottom)
-            lw = 1.5 - i / 100.0
-            line, = self.ax.plot(xscale * X, i + self.G * self.data[i], color="w", lw=lw)
-            self.lines.append(line)
 
     def update(self, i):
-        self.data[:, 1:] = self.data[:, :-1]
-        # fill-in new values
-        if i % 100 == 0:
-            self.val = random.choices([0.1, 0.2, 1, 2, 3, 4], [0.1, 0.1, 0.6, 0.1, 0.1, 0.1])
-        self.data[:, 0] = self.val*np.random.uniform(0, 1, len(self.data))
+        sigma = 1 if i<100 else i//100
+        im = np.random.random((self.image_size[1], self.image_size[0]))
+        im = gaussian_filter(im, sigma=sigma)
+        im = self.ax.imshow(im, animated=True, cmap='gray')
+        self.images.append([im])
 
-        # update data
-        for j in range(len(self.data)):
-            self.lines[j].set_ydata(j + self.G * self.data[j])
-        return self.lines
+class GenerativeArt3(AbstractImageAnimator3):
+    def __init__(self, **args):
+        super().__init__(**args)
 
-    def _animate(self, i):
-        print("Frame {}/{}".format(i, self.num_frames))
-        self.lines = self.update(i)
-        return self.lines
+    def update(self, i):
+        return np.random.random((self.image_size[1], self.image_size[0]))
+
+class GenerativeArt4(AbstractImageAnimator3):
+    def __init__(self, **args):
+        super().__init__(**args)
+        self.r, self.a = meshgrid_polar(self.image_size)
+        self.lr = np.log(1 + self.r)
+        self.factor = -50
+        self.p, self.q, self.r = -50, -40, 20
+
+    def update(self, i):
+        if -5 < self.p < 5:
+            self.p += 0.01
+        else:
+            self.p += 0.2
+        self.q += 0.1
+        array = np.sin(self.a * self.p+ np.sin(self.lr * self.q) + self.lr*self.r)
+        array = np.fmod((1 + array + self.lr), 1)
+        array = get_image_array(array, normalize=False)
+        return array
 
 
 def main():

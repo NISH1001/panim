@@ -10,7 +10,7 @@ plt.style.use('dark_background')
 
 class FlowAnimator(AbstractAnimator):
     """
-        This generate random hill-like stack of lines the height of which are animated.
+        This generates random hill-like stack of lines the height of which are animated.
         The result is more like a flowing hills.
     """
     def __init__(self, **args):
