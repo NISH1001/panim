@@ -23,14 +23,15 @@ from panim.transformers import ZoomTransformer
 def main():
     animator = GenerativeArt(
         width=640,
-        height=320
+        height=320,
+        gray=False
     )
     # animator = FlowAnimator(
     #     nlines = 75,
     #     npoints = 90,
     #     perspective=150
     # )
-    animator.animate(50)
+    animator.animate(100)
     animator.save("out/random5.mp4", fps=24)
 
 if __name__ == "__main__":

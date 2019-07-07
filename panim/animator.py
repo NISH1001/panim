@@ -60,6 +60,7 @@ class AbstractAnimator(metaclass=ABCMeta):
 class AbstractImageAnimator(AbstractAnimator):
     def __init__(self, **args):
         self.interval = args.get('interval', 1)
+        self.gray = args.get('gray', True)
         self.fig = plt.figure()
         self.image_size = (args.get('width', 800), args.get('height', 600))
         w, h = self.image_size
@@ -68,7 +69,11 @@ class AbstractImageAnimator(AbstractAnimator):
 
         # self.array = np.zeros((self.image_size[1], self.image_size[0]))
         self.array = np.random.random((self.image_size[1], self.image_size[0]))
-        self.image = plt.imshow(self.array, animated=True, cmap='gray')
+        if self.gray:
+            self.image = plt.imshow(self.array, animated=True, cmap='gray')
+        else:
+            self.image = plt.imshow(self.array, animated=True)
+
 
     def _animate(self, i):
         print("Frame {}/{}".format(i, self.num_frames))
