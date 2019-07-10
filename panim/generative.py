@@ -37,15 +37,23 @@ class GenerativeArt(AbstractImageAnimator):
         array = get_image_array(array, normalize=False)
         return array
 
-class RandomGenerativeArt(AbstractImageAnimator):
+class RandomlyVanishingPixelArt(AbstractImageAnimator):
     def __init__(self, **args):
         super().__init__(**args)
+        self.array = np.zeros((self.image_size[1], self.image_size[0]))
+        self.val = 1
+        self.white_spawn_rate = 0.9
 
     def update(self, i):
-        sigma = 1 if i<100 else i//100
-        im = np.random.random((self.image_size[1], self.image_size[0]))
-        return gaussian_filter(im, sigma=sigma)
-
+        w, h = 40, 40
+        r, c = random.randint(2*w, self.image_size[1]-2*w), random.randint(2*h, self.image_size[0]-2*h)
+        v = random.uniform(0, 1)
+        if self.val < 0.8:
+            self.array[r:r+w, c:c+h] = self.val
+        elif v > (1-self.white_spawn_rate) and self.val >= 0.6:
+            self.array[r:r+w, c:c+h] = 1
+        self.val -= 0.001
+        return self.array
 
 
 def main():

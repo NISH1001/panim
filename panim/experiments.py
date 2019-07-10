@@ -9,7 +9,8 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from panim.animator import (
-    AbstractAnimator
+    AbstractAnimator,
+    AbstractImageAnimator
 )
 
 plt.style.use('dark_background')
@@ -49,6 +50,15 @@ class ImageAnimator(AbstractAnimator):
 
     def _animate(self, *args):
         return self.update(args)
+
+class RandomGenerativeArt(AbstractImageAnimator):
+    def __init__(self, **args):
+        super().__init__(**args)
+
+    def update(self, i):
+        sigma = 1 if i<100 else i//100
+        im = np.random.random((self.image_size[1], self.image_size[0]))
+        return gaussian_filter(im, sigma=sigma)
 
 
 def main():
