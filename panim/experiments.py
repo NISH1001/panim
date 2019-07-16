@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+import sys
+from pathlib import Path
+
+path = str(Path().absolute())
+print("Adding {} to system path...".format(path))
+sys.path.insert(0, path)
+
 import matplotlib.pyplot as plt
 from matplotlib import animation
 
@@ -11,6 +18,10 @@ import numpy as np
 from panim.animator import (
     AbstractAnimator,
     AbstractImageAnimator
+)
+
+from panim.spiral import (
+    SpiralAnimator
 )
 
 plt.style.use('dark_background')
@@ -60,12 +71,30 @@ class RandomGenerativeArt(AbstractImageAnimator):
         im = np.random.random((self.image_size[1], self.image_size[0]))
         return gaussian_filter(im, sigma=sigma)
 
+class SineArt(SpiralAnimator):
+    def __init__(self, **args):
+        super().__init__(**args)
+
+    def update(self, i):
+        xs =  np.arange(-20, 20, 0.01) * i
+        ys = np.sin(xs) * i%25
+        X = xs
+        # x0 = X[i]
+        # yt = np.cos(x0) * (xs - x0) + np.sin(x0)
+        # return xs, np.cos(x0) * (xs - x0) + np.sin(x0)
+        return xs, ys
+
+
 
 def main():
     # animator = AbstractAnimator() # we cannot initialize this
-    animator = ImageAnimator() # we cannot initialize this
+    # animator = ImageAnimator() # we cannot initialize this
+    # animator.animate(500)
+    # animator.save("out/experiment.mp4", fps=24)
+
+    animator = SineArt()
     animator.animate(500)
-    animator.save("out/experiment.mp4", fps=24)
+    animator.save("out/tangentsine.mp4", fps=24)
 
 if __name__ == "__main__":
     main()

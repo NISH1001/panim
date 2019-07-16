@@ -28,7 +28,6 @@ class SpiralAnimator(AbstractAnimator):
 class SpiralAnimator2(SpiralAnimator):
     def __init__(self, **args):
         super().__init__(**args)
-        self.clockwise = self.args.get('clockwise', True)
         self.scale = self.args.get('scale', 0.4)
         self.npoints = self.args.get('npoints', 25)
         self.a = np.arange(1, self.npoints)
