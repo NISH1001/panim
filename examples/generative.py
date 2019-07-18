@@ -15,6 +15,11 @@ from panim.generative import (
     GenerativeArt,
     RandomlyVanishingPixelArt
 )
+
+from panim.experiments import (
+    RowArt
+)
+
 from panim.flow import (
     FlowAnimator
 )
@@ -22,18 +27,26 @@ from panim.transformers import ZoomTransformer
 
 
 def main():
-    animator = RandomlyVanishingPixelArt(
+    # animator = RandomlyVanishingPixelArt(
+    #     width=800,
+    #     height=600,
+    #     # gray=False
+    # )
+
+    animator = RowArt(
         width=800,
         height=600,
-        # gray=False
     )
+    animator.animate(500)
+    animator.save("out/rowart.mp4", fps=40)
+
     # animator = FlowAnimator(
     #     nlines = 75,
     #     npoints = 90,
     #     perspective=150
     # )
-    animator.animate(1500)
-    animator.save("out/random5.mp4", fps=24)
+    # animator.animate(1500)
+    # animator.save("out/random5.mp4", fps=24)
 
 if __name__ == "__main__":
     main()
