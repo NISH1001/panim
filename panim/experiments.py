@@ -163,6 +163,45 @@ class MetaBall2(AbstractImageAnimator):
         return arr
         # return np.logical_or(arr, arr2)
 
+class MetaBall3(AbstractImageAnimator):
+    def __init__(self, **args):
+        super().__init__(**args)
+        self.x0, self.y0 = 0, 0
+        self.array = np.zeros((self.image_size[1], self.image_size[0]))
+        self.n = args.get('n', 3)
+        self.directions = [random.choice([-1, 1]) for i in range(self.n) ]
+        self.thresholds = [random.choice([0.1, 0.2, 0.3, 0.4]) for i in range(self.n) ]
+        self.deltas = [random.choice([0.01, 0.02, 0.03, 0.04, 0.05]) for i in range(self.n) ]
+        self.radii = [random.choice([0.1, 0.2, 0.3, 0.4]) for i in range(self.n) ]
+        self.centres = [(np.random.uniform(-0.9, 0.9), np.random.uniform(-0.9, 0.9)) for i in range(self.n) ]
+        self.colors = [random.choice([50, 100, 150, 200, 250, 255]) for i in range(self.n) ]
+
+    def update(self, i):
+        arr = np.zeros_like(self.array)
+        nr, nc = arr.shape
+        xs = np.linspace(-1, 1, nc)
+        ys = np.linspace(-1, 1, nr)
+
+        # go through every pixel and evaluate the function
+        for col, x in enumerate(xs):
+            for row, y in enumerate(ys):
+                for radius, threshold, centre, color in zip(self.radii, self.thresholds, self.centres, self.colors):
+                    x0, y0 = centre
+                    val = ((x - x0)**2 + (y -y0) ** 2) / radius**2
+                    if val < threshold:
+                        arr[row][col] = 255
+
+        # update params
+        for i, (r, d) in enumerate(zip(self.radii, self.directions)):
+            if r >= 0.9:
+                self.directions[i] *= -1
+            if r < 0.1:
+                self.radii[i] = 0.1
+                self.directions[i] *= -1
+                self.centres[i] = (np.random.uniform(-0.8, 0.8), np.random.uniform(-0.8, 0.8))
+            self.radii[i] += self.deltas[i] * self.directions[i]
+        return arr
+
 
 
 
@@ -180,12 +219,13 @@ def main():
     # animator.animate(100)
     # animator.save("out/row.mp4", fps=24)
 
-    animator = MetaBall2(
-        width=100,
-        height=100
+    animator = MetaBall3(
+        width=800,
+        height=800,
+        n=7,
     )
     animator.animate(500)
-    animator.save("out/metaball.mp4", fps=30)
+    animator.save("out/metaball.mp4", fps=24)
 
 if __name__ == "__main__":
     main()
