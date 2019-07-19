@@ -63,8 +63,10 @@ class AbstractImageAnimator(AbstractAnimator):
         self.gray = args.get('gray', True)
         self.fig = plt.figure()
         self.image_size = (args.get('width', 800), args.get('height', 600))
+        self.wres, self.hres = (args.get('wres', 12), args.get('hres', 9))
         w, h = self.image_size
-        self.fig.set_size_inches(12, 9, True)
+        self.fig.set_size_inches(self.wres, self.hres, True)
+        # self.ax = plt.axes(xlim=(0, w), ylim=(0, h))
         self.ax = plt.axes(xlim=(0, w), ylim=(0, h))
 
         # self.array = np.zeros((self.image_size[1], self.image_size[0]))
