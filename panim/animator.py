@@ -15,6 +15,7 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.coords = []
         self.args = args
         self.interval = args.get('interval', 1)
+        self.start_position = args.get('start_position', 0.0)
         self.fig = plt.figure()
         # self.fig.set_size_inches(13.66, 7.68, True)
         w, h = args.get('width', 8), args.get('height', 6)

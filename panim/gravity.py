@@ -8,7 +8,7 @@ from panim.animator import AbstractAnimator
 
 plt.style.use('dark_background')
 
-class GravityAnimtor(AbstractAnimator):
+class PendulumAnimator(AbstractAnimator):
     def __init__(self, **args):
         super().__init__(**args)
         self.gravity = args.get('gravity', 9.8)
@@ -27,14 +27,15 @@ class GravityAnimtor(AbstractAnimator):
 
         # timeline
         dt = args.get('dt', 0.05)
-        time_length = args.get('time_length', 10)
-        self.t = np.arange(0, 60, dt)
+        self.time_length = args.get('time_length', 10)
+        self.t = np.arange(0, self.time_length, dt)
         self.setup()
 
     def setup(self):
         # initial state
         self.state = np.radians([self.theta1, self.omega1, self.theta2, self.omega2])
         y = integrate.odeint(self.derivatives, self.state, self.t)
+        self.y = y
         self.x1 = self.l1*np.sin(y[:, 0])
         self.y1 = -self.l1*np.cos(y[:, 0])
 
@@ -71,6 +72,18 @@ class GravityAnimtor(AbstractAnimator):
         x = [0, self.x1[i], self.x2[i]]
         y = [0, self.y1[i], self.y2[i]]
         return x, y
+
+class PendulumTipAnimator(PendulumAnimator):
+    def __init__(self, **args):
+        super().__init__(**args)
+        self.gravity = args.get('gravity', 9.8)
+
+    def update(self, i):
+        x = [0, self.x1[i], self.x2[i]]
+        y = [0, self.y1[i], self.y2[i]]
+        self.coords.append((x[2], y[2]+self.start_position[-1]))
+        X, Y = zip(*self.coords)
+        return X, Y
 
 
 def main():

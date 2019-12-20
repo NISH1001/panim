@@ -359,7 +359,7 @@ def spiral():
 
 def main():
     start = time.time()
-    # hilbert()
+    hilbert()
     # dragoncurve()
     # sierpinski()
     # sierpinski_square()
@@ -371,7 +371,7 @@ def main():
     # sierpinski_arrowhead()
     # pentaplexity()
     # tiles()
-    spiral()
+    # spiral()
     end = time.time()
     print("Time Taken :: {} seconds".format(end-start))
 

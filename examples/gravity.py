@@ -12,19 +12,32 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('dark_background')
 
-from panim.gravity import GravityAnimtor
+from panim.gravity import (
+    PendulumAnimator,
+    PendulumTipAnimator
+)
 # from panim.transformers import ZoomTransformer
 
 
 def main():
-    animator = GravityAnimtor(
+    # animator = PendulumAnimator(
+    #     nlimit=15,
+    #     start_position=(0, 5),
+    #     time_length=200,
+    #     dt=0.05,
+    #     l1=5, l2=5,
+    #     m1=1, m2=1
+    # )
+    animator = PendulumTipAnimator(
         nlimit=15,
-        time_length=1,
-        l1=3, l2=3,
+        start_position=(0, 5),
+        time_length=250,
+        dt=0.05,
+        l1=5, l2=5,
         m1=1, m2=1
     )
-    animator.animate(200)
-    animator.save("out/gravity.mp4")
+    animator.animate(len(animator.y))
+    animator.save("out/pendulum-tip-2.mp4")
 
 if __name__ == "__main__":
     main()
