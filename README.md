@@ -3,6 +3,13 @@ Paradoxical ANIMation
 
 ## What?
 Yes. Nothing much. Just my personal "mathematical" animation tool.
+I intend to use this as a zone where my love for mathematics and coding meets. 
+
+As Feynman said:
+> I learned very early the difference between knowing the name of something and knowing something.
+
+
+For me this is only possible by implementing "things" from scratch.
 
 ## So?
 Yeah. For now it can render "things" like:
