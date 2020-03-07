@@ -5,10 +5,11 @@ import matplotlib.pyplot as plt
 
 from panim.animator import AbstractAnimator
 
-# plt.style.use('dark_background')
-plt.xkcd()
+plt.style.use("dark_background")
+# plt.xkcd()
 
 DEGREES_TO_RADIANS = np.pi / 180
+
 
 class LSystem:
     """
@@ -32,7 +33,10 @@ class LSystem:
             | : rotate by 180 degree
 
     """
-    def __init__(self, axiom, rule, turn_angle=45.0, start_position=(0.0, 0.0), iteration=5):
+
+    def __init__(
+        self, axiom, rule, turn_angle=45.0, start_position=(0.0, 0.0), iteration=5
+    ):
         self.axiom = axiom
         self.rule = rule
         self.turn_angle = turn_angle
@@ -47,7 +51,7 @@ class LSystem:
             rule:
                 a dictionary with mapping from a symbol to new symbol
         """
-        return ''.join(rule.get(c, c) for c in sequence)
+        return "".join(rule.get(c, c) for c in sequence)
 
     def transform_multiple(self, sequence, rule, iteration):
         seq = sequence
@@ -59,7 +63,7 @@ class LSystem:
         """
             A generator expression wrapper around simulate_turtle.
         """
-        for c in self.simulate_turtle( self.seq, self.start_position, self.turn_angle):
+        for c in self.simulate_turtle(self.seq, self.start_position, self.turn_angle):
             yield c
 
     def get_coordinates(self):
@@ -68,11 +72,11 @@ class LSystem:
             This is an alternate to `invoke`.
         """
         return [
-            c for c in self.simulate_turtle(
-                self.seq,
-                self.start_position,
-                self.turn_angle
-        )]
+            c
+            for c in self.simulate_turtle(
+                self.seq, self.start_position, self.turn_angle
+            )
+        ]
 
     def simulate_turtle(self, sequence, start_position, turn_angle):
         # (x, y, angle)
@@ -86,35 +90,43 @@ class LSystem:
             x, y, angle = state
 
             # Move turtle forward
-            if symbol in 'Ff':
-                state = (x - np.cos(angle * DEGREES_TO_RADIANS),
-                        y + np.sin(angle * DEGREES_TO_RADIANS),
-                        angle)
+            if symbol in "Ff":
+                state = (
+                    x - np.cos(angle * DEGREES_TO_RADIANS),
+                    y + np.sin(angle * DEGREES_TO_RADIANS),
+                    angle,
+                )
 
-                if symbol == 'f':
+                if symbol == "f":
                     # Insert a break in the path to not draw the line
-                    yield (float('nan'), float('nan'))
+                    yield (float("nan"), float("nan"))
 
                 yield (state[0], state[1])
 
             # turn clockwise without moving
-            elif symbol == '+':
+            elif symbol == "+":
                 state = (x, y, angle + turn_angle)
                 # yield (x, y)
 
             # turn counter-clockwise without moving
-            elif symbol == '-':
+            elif symbol == "-":
                 state = (x, y, angle - turn_angle)
                 # yield (x, y)
 
-            elif symbol == '|':
+            elif symbol == "|":
                 state = (x, y, angle - 180)
                 # yield (x, y)
 
     def __str__(self):
         return "Axiom={}\nRule={}\nTurn Angle={}\nIterations={}\nFinal Sequence Length={}\nStart Position={}".format(
-            self.axiom, self.rule, self.turn_angle, self.iteration, len(self.seq), self.start_position
+            self.axiom,
+            self.rule,
+            self.turn_angle,
+            self.iteration,
+            len(self.seq),
+            self.start_position,
         )
+
 
 class BranchedLSystem(LSystem):
     """
@@ -133,6 +145,7 @@ class BranchedLSystem(LSystem):
                 (kind of: "go back to that last remember state")
 
     """
+
     def simulate_turtle(self, sequence, start_position, turn_angle):
         saved_states = []
         state = (*start_position, 90)
@@ -141,33 +154,35 @@ class BranchedLSystem(LSystem):
         for symbol in sequence:
             x, y, angle = state
 
-            if symbol.lower() in 'abcdefghij':
-            # if symbol in 'Ff':
-                state = (x - np.cos(angle * DEGREES_TO_RADIANS),
-                        y + np.sin(angle * DEGREES_TO_RADIANS),
-                        angle)
+            if symbol.lower() in "abcdefghij":
+                # if symbol in 'Ff':
+                state = (
+                    x - np.cos(angle * DEGREES_TO_RADIANS),
+                    y + np.sin(angle * DEGREES_TO_RADIANS),
+                    angle,
+                )
 
                 # Add a break in the line if symbol matches a-j
                 # if symbol == 'f':
                 if symbol.islower():
-                    yield (float('nan'), float('nan'))
+                    yield (float("nan"), float("nan"))
 
                 yield (state[0], state[1])
 
-            elif symbol == '+':
+            elif symbol == "+":
                 state = (x, y, angle + turn_angle)
 
-            elif symbol == '-':
+            elif symbol == "-":
                 state = (x, y, angle - turn_angle)
 
             # Remember current state
-            elif symbol == '[':
+            elif symbol == "[":
                 saved_states.append(state)
 
             # Return to previous state
-            elif symbol == ']':
+            elif symbol == "]":
                 state = saved_states.pop()
-                yield (float('nan'), float('nan'))
+                yield (float("nan"), float("nan"))
                 x, y, _ = state
                 yield (x, y)
 
@@ -176,59 +191,58 @@ class LSystemAnimator(AbstractAnimator):
     def __init__(self, **args):
         super().__init__(**args)
         # self.program = args.get('program', 'FfF++FfF++FfF++FfF')
-        axiom = args.get('axiom', 'F')
-        rule = args.get('rule', {'F': 'FfF++'})
-        turn_angle = args.get('turn_angle', 45.0)
-        iteration = args.get('iteration', 15)
-        start_position = args.get('start_position', (0.0, 0.0))
+        axiom = args.get("axiom", "F")
+        rule = args.get("rule", {"F": "FfF++"})
+        turn_angle = args.get("turn_angle", 45.0)
+        iteration = args.get("iteration", 15)
+        start_position = args.get("start_position", (0.0, 0.0))
         self.lsystem = LSystem(
             axiom=axiom,
             rule=rule,
             turn_angle=turn_angle,
             iteration=iteration,
-            start_position=start_position
+            start_position=start_position,
         )
-        self.coords = [ c for c in self.lsystem.invoke() ]
+        self.coords = [c for c in self.lsystem.invoke()]
         print(self.lsystem)
 
     def update(self, i):
-        return zip(*self.coords[:i+1])
+        return zip(*self.coords[: i + 1])
 
 
 class BranchedLSystemAnimator(LSystemAnimator):
     def __init__(self, **args):
         super().__init__(**args)
         # self.program = args.get('program', 'FfF++FfF++FfF++FfF')
-        axiom = args.get('axiom', 'F')
-        rule = args.get('rule', {'F': 'FfF++'})
-        turn_angle = args.get('turn_angle', 45.0)
-        iteration = args.get('iteration', 15)
-        start_position = args.get('start_position', (0.0, 0.0))
+        axiom = args.get("axiom", "F")
+        rule = args.get("rule", {"F": "FfF++"})
+        turn_angle = args.get("turn_angle", 45.0)
+        iteration = args.get("iteration", 15)
+        start_position = args.get("start_position", (0.0, 0.0))
         self.lsystem = BranchedLSystem(
             axiom=axiom,
             rule=rule,
             turn_angle=turn_angle,
             iteration=iteration,
-            start_position=start_position
+            start_position=start_position,
         )
-        self.coords = [ c for c in self.lsystem.invoke() ]
+        self.coords = [c for c in self.lsystem.invoke()]
         print(self.lsystem)
 
 
 def main():
-    rule = {'F': '+F+F--F+F'}
-    axiom = 'F'
+    rule = {"F": "+F+F--F+F"}
+    axiom = "F"
     angle = 45
 
     # hilbert
-    axiom = 'L'
-    rule = {
-        'L': '-RF+LFL+FR-',
-        'R': '+LF-RFR-FL+'
-    }
+    axiom = "L"
+    rule = {"L": "-RF+LFL+FR-", "R": "+LF-RFR-FL+"}
     angle = 90
 
-    animator = LSystemAnimator(interval=50, iteration=5, rule=rule, axiom=axiom, turn_angle=angle)
+    animator = LSystemAnimator(
+        interval=50, iteration=5, rule=rule, axiom=axiom, turn_angle=angle
+    )
     animator.animate(len(animator.coords))
     # animator.animate(500)
     animator.save("out/ls.mp4")
@@ -237,6 +251,6 @@ def main():
     # coords = [ c for c in lsystem.invoke() ]
     # print(coords)
 
+
 if __name__ == "__main__":
     main()
-
