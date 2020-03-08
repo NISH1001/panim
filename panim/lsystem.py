@@ -204,10 +204,12 @@ class LSystemAnimator(AbstractAnimator):
             start_position=start_position,
         )
         self.coords = [c for c in self.lsystem.invoke()]
-        print(self.lsystem)
 
     def update(self, i):
         return zip(*self.coords[: i + 1])
+
+    def __str__(self):
+        return f"coords-length={len(self.coords)}\n" + str(self.lsystem)
 
 
 class BranchedLSystemAnimator(LSystemAnimator):

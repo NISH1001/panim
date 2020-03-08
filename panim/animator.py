@@ -16,6 +16,7 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.coords = []
         self.args = args
         self.interval = args.get("interval", 1)
+        self.verbose = args.get("verbose", True)
         self.start_position = args.get("start_position", 0.0)
         self.fig = plt.figure()
         # self.fig.set_size_inches(13.66, 7.68, True)
@@ -41,7 +42,8 @@ class AbstractAnimator(metaclass=ABCMeta):
         pass
 
     def _animate(self, i):
-        print("Frame {}/{}".format(i, self.num_frames))
+        if self.verbose:
+            print("Frame {}/{}".format(i, self.num_frames))
         X, Y = self.update(i)
         self.img.set_data(X, Y)
         return [self.img]
