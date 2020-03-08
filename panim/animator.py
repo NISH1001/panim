@@ -18,6 +18,7 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.interval = args.get("interval", 1)
         self.verbose = args.get("verbose", True)
         self.start_position = args.get("start_position", 0.0)
+        self.color = args.get("color", (1, 1, 1))
         self.fig = plt.figure()
         # self.fig.set_size_inches(13.66, 7.68, True)
         w, h = args.get("width", 8), args.get("height", 6)
@@ -25,8 +26,8 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.nlimit = args.get("nlimit", 50)
         n = self.nlimit
         self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))
-        line_width = args.get("line_width", 1)
-        (self.img,) = self.ax.plot([], [], lw=line_width)
+        self.line_width = args.get("line_width", 1)
+        (self.img,) = self.ax.plot([], [], lw=self.line_width, c=self.color)
         if "title" in args:
             plt.title(args["title"])
 

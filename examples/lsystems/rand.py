@@ -14,6 +14,7 @@ print("Adding {} to system path...".format(path))
 sys.path.insert(0, path)
 
 from panim.lsystem import LSystemAnimator, BranchedLSystemAnimator
+from panim.utils import generate_random_color
 
 plt.style.use("dark_background")
 plt.axis("off")
@@ -134,8 +135,8 @@ def combine(animators):
 
 def multiple():
     axiom = "F"
-    N = 5
-    iteration = 5
+    N = 4
+    iteration = 7
     n = 20
 
     animators = []
@@ -151,6 +152,8 @@ def multiple():
         if abs(start_pos[1]) > n:
             start_pos = (start_pos[0], 0)
 
+        color = generate_random_color()
+        print(color)
         animator = LSystemAnimator(
             interval=1,
             iteration=iteration,
@@ -160,10 +163,10 @@ def multiple():
             start_position=start_pos,
             nlimit=n,
             line_width=1,
+            color=color,
             verbose=False,
         )
         print(animator)
-        print(f"Start={animator.start_position} -- End={animator.coords[-1]}")
         animators.append(animator)
         print("-" * 10)
 

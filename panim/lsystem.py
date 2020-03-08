@@ -209,7 +209,11 @@ class LSystemAnimator(AbstractAnimator):
         return zip(*self.coords[: i + 1])
 
     def __str__(self):
-        return f"coords-length={len(self.coords)}\n" + str(self.lsystem)
+        return (
+            f"coords-length={len(self.coords)}\n"
+            + str(self.lsystem)
+            + f"End-Position={self.coords[-1]}\n"
+        )
 
 
 class BranchedLSystemAnimator(LSystemAnimator):
