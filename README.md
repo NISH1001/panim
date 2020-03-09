@@ -17,7 +17,7 @@ Yeah. For now it can render "things" like:
 - Rain
 - Generative Arts
 - Double Pendulum
-- Zooming In
+- Zooming In and Out
 - Random L-System
 - Multiple Combined ANimation
 
@@ -52,3 +52,13 @@ Yeah. For now it can render "things" like:
 - [Vanishing Pixels](https://www.youtube.com/watch?v=r0Rw-ix-5PY)
 - [Simple Water Flow](https://www.youtube.com/watch?v=wMujrvugwIk)
 - [White Voids](https://www.youtube.com/watch?v=Q_KM3v3K3_I)
+
+
+## TO-DO
+Following are the things I have in my mind but I am too much lost in my own mind-cave that I have to find time to implement. :/
+
+- Add PanTransformer to pan the animation scene
+- Add a transformer to make old points vanish into the oblivion as redering progresses
+- Add artistic animation objects like circle, rectangle
+- Add the concept of camera
+- Refactor project structure
