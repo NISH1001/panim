@@ -68,6 +68,37 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.anim.save(filename, writer=writer, dpi=dpi)
 
 
+class CombinedAnimator(AbstractAnimator):
+    def __init__(self, **args):
+        super().__init__(**args)
+        self.animators = []
+        self.img = []
+        self.total_coords = 0
+
+    def add_animator(self, animator):
+        self.total_coords += len(animator.coords)
+        self.animators.append(animator)
+        self.img.append(
+            self.ax.plot([], [], lw=animator.line_width, c=animator.color)[0]
+        )
+
+    def add_animators(self, animators):
+        for animator in animators:
+            self.add_animator(animator)
+
+    def update(self, i):
+        for j, animator in enumerate(self.animators):
+            X, Y = animator.update(i)
+            self.img[j].set_data(X, Y)
+        return self.img
+
+    def _animate(self, i):
+        if self.verbose:
+            print("Frame {}/{}".format(i, self.num_frames))
+        self.img = self.update(i)
+        return self.img
+
+
 class AbstractImageAnimator(AbstractAnimator):
     def __init__(self, **args):
         self.interval = args.get("interval", 1)

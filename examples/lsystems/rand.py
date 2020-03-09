@@ -14,6 +14,7 @@ print("Adding {} to system path...".format(path))
 sys.path.insert(0, path)
 
 from panim.lsystem import LSystemAnimator, BranchedLSystemAnimator
+from panim.animator import CombinedAnimator
 from panim.utils import generate_random_color
 
 plt.style.use("dark_background")
@@ -135,9 +136,9 @@ def combine(animators):
 
 def multiple():
     axiom = "F"
-    N = 4
-    iteration = 7
-    n = 20
+    N = 5
+    iteration = 5
+    n = 10
 
     animators = []
     nanimators = 10
@@ -153,9 +154,8 @@ def multiple():
             start_pos = (start_pos[0], 0)
 
         color = generate_random_color()
-        print(color)
         animator = LSystemAnimator(
-            interval=1,
+            interval=60,
             iteration=iteration,
             rule=rule,
             axiom=axiom,
@@ -164,17 +164,26 @@ def multiple():
             nlimit=n,
             line_width=1,
             color=color,
-            verbose=False,
+            verbose=True,
         )
         print(animator)
         animators.append(animator)
         print("-" * 10)
 
+    combined_animator = CombinedAnimator(
+        interval=180, nlimit=n, line_width=1, color=(1, 1, 1), verbose=True,
+    )
+    combined_animator.add_animators(animators)
+
     animator = combine(animators)
     animator.verbose = True
     print(animator)
-    animator.animate(len(animator.coords))
-    animator.save(f"out/curves/random-{int(time.time())}.mp4", fps=25, dpi=150)
+    # animator.animate(len(animator.coords))
+    # animator.save(f"out/curves/random-{int(time.time())}.mp4", fps=25, dpi=150)
+    # print(combined_animator.img_list[0].get_data())
+    nframes = max([len(animator.coords) for animator in animators])
+    combined_animator.animate(nframes)
+    combined_animator.save(f"out/curves/random-{int(time.time())}.mp4", fps=25, dpi=150)
 
 
 def main():
