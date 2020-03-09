@@ -10,21 +10,16 @@ sys.path.insert(0, path)
 import numpy as np
 import matplotlib.pyplot as plt
 
-from panim.lsystem import (
-    LSystemAnimator,
-    BranchedLSystemAnimator
-)
+from panim.lsystem import LSystemAnimator, BranchedLSystemAnimator
 from panim.transformers import ZoomTransformer
 
-plt.style.use('dark_background')
+plt.style.use("dark_background")
+
 
 def hilbert():
     angle = 90
-    axiom = 'L'
-    rule = {
-        'L': '-RF+LFL+FR-',
-        'R': '+LF-RFR-FL+'
-    }
+    axiom = "L"
+    rule = {"L": "-RF+LFL+FR-", "R": "+LF-RFR-FL+"}
     iteration = 5
     n = 40
     animator = LSystemAnimator(
@@ -33,28 +28,25 @@ def hilbert():
         rule=rule,
         axiom=axiom,
         turn_angle=angle,
-        start_position=(n//2, -n//2),
-        nlimit=n
+        start_position=(n // 2, -n // 2),
+        nlimit=n,
     )
 
     zoomer = ZoomTransformer(animobj=animator, factor=500)
     zoomer.animate(len(animator.coords))
     zoomer.save("out/hilbert.mp4")
 
+
 def test():
-    rule = {
-        'F': 'FF+F-F+F+FF'
-    }
-    axiom = 'F+F+F+F'
+    rule = {"F": "FF+F-F+F+FF"}
+    axiom = "F+F+F+F"
     angle = 90
     iteration = 3
     n = 75
 
     angle = 22.5
-    axiom = 'F'
-    rule = {
-        'F': ' FF+[+F-F-F]-[-F+F+F]'
-    }
+    axiom = "F"
+    rule = {"F": " FF+[+F-F-F]-[-F+F+F]"}
     iteration = 5
 
     # animator = LSystemAnimator(
@@ -73,13 +65,10 @@ def test():
         axiom=axiom,
         turn_angle=angle,
         start_position=(0, -20),
-        nlimit=40
+        nlimit=40,
     )
 
-    zoomer = ZoomTransformer(
-        animobj=animator,
-        factor=2000,
-        nlimit=n)
+    zoomer = ZoomTransformer(animobj=animator, factor=2000, nlimit=n)
     zoomer.animate(len(animator.coords))
     zoomer.save("out/zoom-test-tree.mp4")
 
@@ -87,6 +76,6 @@ def test():
 def main():
     test()
 
+
 if __name__ == "__main__":
     main()
-

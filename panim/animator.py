@@ -27,7 +27,7 @@ class AbstractAnimator(metaclass=ABCMeta):
         n = self.nlimit
         self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))
         self.line_width = args.get("line_width", 1)
-        (self.img,) = self.ax.plot([], [], lw=self.line_width, c=self.color)
+        self.img = self.ax.plot([], [], lw=self.line_width, c=self.color)[0]
         if "title" in args:
             plt.title(args["title"])
 
@@ -39,15 +39,34 @@ class AbstractAnimator(metaclass=ABCMeta):
 
     @abstractmethod
     def update(self, i):
-        # Do something and return X, Y
+        """
+            Do calculation and return either (X, Y) or a list of (X, Y)
+        """
         pass
 
     def _animate(self, i):
+        """
+            Internal animation function that calls handles animation
+            by calling update()
+
+            If self.img is a single plot() object,
+                then update() returns (X, Y) values to be used
+
+            If self.img is a list of several plot(), update() returns a list
+                of (X, Y) values
+        """
         if self.verbose:
             print("Frame {}/{}".format(i, self.num_frames))
-        X, Y = self.update(i)
-        self.img.set_data(X, Y)
-        return [self.img]
+        res = self.update(i)
+        if type(res) is list:
+            for j, img in enumerate(self.img):
+                X, Y = res[j]
+                self.img[j].set_data(X, Y)
+            return self.img
+        else:
+            (X, Y) = res
+            self.img.set_data(X, Y)
+            return [self.img]
 
     def animate(self, num_frames=1000):
         self.num_frames = num_frames
@@ -87,16 +106,11 @@ class CombinedAnimator(AbstractAnimator):
             self.add_animator(animator)
 
     def update(self, i):
+        res = []
         for j, animator in enumerate(self.animators):
             X, Y = animator.update(i)
-            self.img[j].set_data(X, Y)
-        return self.img
-
-    def _animate(self, i):
-        if self.verbose:
-            print("Frame {}/{}".format(i, self.num_frames))
-        self.img = self.update(i)
-        return self.img
+            res.append((X, Y))
+        return res
 
 
 class AbstractImageAnimator(AbstractAnimator):

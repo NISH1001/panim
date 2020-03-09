@@ -16,6 +16,7 @@ sys.path.insert(0, path)
 from panim.lsystem import LSystemAnimator, BranchedLSystemAnimator
 from panim.animator import CombinedAnimator
 from panim.utils import generate_random_color
+from panim.transformers import ZoomTransformer
 
 plt.style.use("dark_background")
 plt.axis("off")
@@ -127,18 +128,11 @@ def generate_continuous(N):
     return {"F": "".join(main)}
 
 
-def combine(animators):
-    res = animators[0]
-    for anim in animators[1:]:
-        res.coords += anim.coords
-    return res
-
-
 def multiple():
     axiom = "F"
     N = 5
-    iteration = 5
-    n = 10
+    iteration = 7
+    n = 40
 
     animators = []
     nanimators = 10
@@ -148,6 +142,7 @@ def multiple():
         rule = generate_continuous(N)
         angle = random.choice(range(0, 181, 1))
         start_pos = (0.0, 0.0) if not animators else animators[-1].coords[-1]
+
         if abs(start_pos[0]) > n:
             start_pos = (0, start_pos[-1])
         if abs(start_pos[1]) > n:
@@ -155,7 +150,7 @@ def multiple():
 
         color = generate_random_color()
         animator = LSystemAnimator(
-            interval=60,
+            interval=1,
             iteration=iteration,
             rule=rule,
             axiom=axiom,
@@ -166,24 +161,20 @@ def multiple():
             color=color,
             verbose=True,
         )
+        if random.choice([True, False]):
+            animator = ZoomTransformer(animobj=animator, factor=500)
         print(animator)
         animators.append(animator)
         print("-" * 10)
 
     combined_animator = CombinedAnimator(
-        interval=180, nlimit=n, line_width=1, color=(1, 1, 1), verbose=True,
+        interval=1, nlimit=n, line_width=1, color=(1, 1, 1), verbose=True,
     )
     combined_animator.add_animators(animators)
 
-    animator = combine(animators)
-    animator.verbose = True
-    print(animator)
-    # animator.animate(len(animator.coords))
-    # animator.save(f"out/curves/random-{int(time.time())}.mp4", fps=25, dpi=150)
-    # print(combined_animator.img_list[0].get_data())
     nframes = max([len(animator.coords) for animator in animators])
     combined_animator.animate(nframes)
-    combined_animator.save(f"out/curves/random-{int(time.time())}.mp4", fps=25, dpi=150)
+    combined_animator.save(f"out/random/random-{int(time.time())}.mp4", fps=25, dpi=100)
 
 
 def main():
