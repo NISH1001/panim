@@ -131,11 +131,11 @@ def generate_continuous(N):
 def multiple():
     axiom = "F"
     N = 5
-    iteration = 7
+    iteration = 6
     n = 40
 
     animators = []
-    nanimators = 10
+    nanimators = 15
     for i in range(nanimators):
         print("-" * 10)
         print(f"Animator number = {i}/{nanimators}")
@@ -161,8 +161,8 @@ def multiple():
             color=color,
             verbose=True,
         )
-        if random.choice([True, False]):
-            animator = ZoomTransformer(animobj=animator, factor=500)
+        if random.choice([True, True, True, False]):
+            animator = ZoomTransformer(animobj=animator, color=(1, 1, 1), factor=500)
         print(animator)
         animators.append(animator)
         print("-" * 10)

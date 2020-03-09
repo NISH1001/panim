@@ -88,6 +88,10 @@ class AbstractAnimator(metaclass=ABCMeta):
 
 
 class CombinedAnimator(AbstractAnimator):
+    """
+        A class to hold render multiple animator instances
+    """
+
     def __init__(self, **args):
         super().__init__(**args)
         self.animators = []

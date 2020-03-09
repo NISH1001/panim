@@ -66,6 +66,7 @@ def test():
         turn_angle=angle,
         start_position=(0, -20),
         nlimit=40,
+        color=(1, 0, 0),
     )
 
     zoomer = ZoomTransformer(animobj=animator, factor=2000, nlimit=n)

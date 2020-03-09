@@ -118,13 +118,16 @@ class LSystem:
                 # yield (x, y)
 
     def __str__(self):
-        return "Axiom={}\nRule={}\nTurn Angle={}\nIterations={}\nFinal Sequence Length={}\nStart Position={}".format(
-            self.axiom,
-            self.rule,
-            self.turn_angle,
-            self.iteration,
-            len(self.seq),
-            self.start_position,
+        return (
+            f"~{self.__class__.__name__}~\n"
+            + "Axiom={}\nRule={}\nTurn Angle={}\nIterations={}\nFinal Sequence Length={}\nStart Position={}".format(
+                self.axiom,
+                self.rule,
+                self.turn_angle,
+                self.iteration,
+                len(self.seq),
+                self.start_position,
+            )
         )
 
 
