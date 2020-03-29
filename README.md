@@ -19,7 +19,7 @@ Yeah. For now it can render "things" like:
 - Double Pendulum
 - Zooming In and Out
 - Random L-System
-- Multiple Combined ANimation
+- Multiple Combined Animation
 
 ## Animation Renedered From Panim
 
@@ -34,9 +34,14 @@ Yeah. For now it can render "things" like:
 - [Crystals](https://www.youtube.com/watch?v=VVgVbBwdybw)
 - [Square Spiral](https://www.youtube.com/watch?v=zCrNb2teSkA)
 
-### Random L-Systems
+### Random L-System
+- [Random Sphere-like Branched L-System](https://www.youtube.com/watch?v=M20CyhPMbKU)
+
+### Combined Animators for Random L-System
 - [Combined Animation](https://www.youtube.com/watch?v=ZD2eDmWKgV4)
-- [Combined Animation with 25 Randomly Generated L-System](https://www.youtube.com/watch?v=CesihF7eVtw&feature=youtu.be)
+- [Combined Animation with 25 Randomly Generated L-System](https://www.youtube.com/watch?v=CesihF7eVt)
+- [Random Psychedelic Animation with N=75 Animators combined](https://www.youtube.com/watch?v=Cc8_EhgjVv0)
+
 
 ### Rain
 - [Rain Animation](https://www.youtube.com/watch?v=mUZdfECU09A)
