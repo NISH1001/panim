@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import time
+
 import matplotlib.pyplot as plt
 from matplotlib import animation
 
@@ -21,11 +23,12 @@ class AbstractAnimator(metaclass=ABCMeta):
         self.color = args.get("color", (1, 1, 1))
         self.fig = plt.figure()
         # self.fig.set_size_inches(13.66, 7.68, True)
-        w, h = args.get("width", 8), args.get("height", 6)
+        w, h = args.get("width", 12.80), args.get("height", 7.68)
         self.fig.set_size_inches(w, h, True)
         self.nlimit = args.get("nlimit", 50)
         n = self.nlimit
         self.ax = plt.axes(xlim=(-n, n), ylim=(-n, n))
+        # self.ax = plt.axes(xlim=(-w // 2, w // 2), ylim=(-h // 2, h // 2))
         self.line_width = args.get("line_width", 1)
         self.img = self.ax.plot([], [], lw=self.line_width, c=self.color)[0]
         if "title" in args:
@@ -81,10 +84,12 @@ class AbstractAnimator(metaclass=ABCMeta):
         )
 
     def save(self, filename="out/animation.mp4", fps=30, dpi=100):
+        start = time.time()
         writer = animation.writers["ffmpeg"](fps=fps)
         # self.anim.save(filename, writer='imagemagick')
         print("Saving {} to {}".format(self.__class__.__name__, filename))
         self.anim.save(filename, writer=writer, dpi=dpi)
+        print(f"Time Taken = {time.time() - start} seconds")
 
 
 class CombinedAnimator(AbstractAnimator):
