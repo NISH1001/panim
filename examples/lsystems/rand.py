@@ -131,17 +131,22 @@ def generate_continuous(N):
 def multiple():
     axiom = "F"
     N = 5
-    iteration = 6
-    n = 40
+    iteration = 4
+    n = 500
 
     animators = []
-    nanimators = 15
+    nanimators = 100
     for i in range(nanimators):
         print("-" * 10)
         print(f"Animator number = {i}/{nanimators}")
-        rule = generate_continuous(N)
+
+        # rule = generate_continuous(N)
+        # rule = generate_branched(N)
+        rule = random.choice([generate_branched(N), generate_continuous(N)])
+
         angle = random.choice(range(0, 181, 1))
-        start_pos = (0.0, 0.0) if not animators else animators[-1].coords[-1]
+        # start_pos = (0.0, 0.0) if not animators else animators[-1].coords[-1]
+        start_pos = (0, 0)
 
         if abs(start_pos[0]) > n:
             start_pos = (0, start_pos[-1])
@@ -149,7 +154,12 @@ def multiple():
             start_pos = (start_pos[0], 0)
 
         color = generate_random_color()
-        animator = LSystemAnimator(
+
+        # cls = LSystemAnimator
+        # cls = BranchedLSystemAnimator
+
+        cls = random.choice([LSystemAnimator, BranchedLSystemAnimator])
+        animator = cls(
             interval=1,
             iteration=iteration,
             rule=rule,
@@ -161,8 +171,16 @@ def multiple():
             color=color,
             verbose=True,
         )
-        if random.choice([True, True, True, False]):
-            animator = ZoomTransformer(animobj=animator, color=(1, 1, 1), factor=500)
+
+        factor = 150
+        if random.choice([True, True]):
+            animator = random.choice(
+                [
+                    ZoomTransformer(animobj=animator, factor=factor),
+                    ZoomTransformer(animobj=animator, color=(1, 1, 1), factor=factor),
+                ]
+            )
+
         print(animator)
         animators.append(animator)
         print("-" * 10)
@@ -172,7 +190,8 @@ def multiple():
     )
     combined_animator.add_animators(animators)
 
-    nframes = max([len(animator.coords) for animator in animators])
+    # nframes = max([len(animator.coords) for animator in animators])
+    nframes = 10000
     combined_animator.animate(nframes)
     combined_animator.save(f"out/random/random-{int(time.time())}.mp4", fps=25, dpi=100)
 

@@ -26,6 +26,8 @@ class ZoomTransformer(AbstractAnimator):
         super().__init__(**args)
         self.__dict__.update(self.animobj.__dict__)
         self.factor = args.get("factor", 1.0)
+        self.reset_frame = args.get("reset_frame", 0)
+        self.reset_interval = args.get("reset_interval", 2500)
 
     def update(self, i):
         X, Y = self.animobj.update(i)
@@ -33,8 +35,19 @@ class ZoomTransformer(AbstractAnimator):
         Y = np.array(Y)
         # X = X * self.factor * i
         # Y = Y * self.factor * i
-        X = X * np.exp(1 / self.factor * i)
-        Y = Y * np.exp(1 / self.factor * i)
+
+        if i % self.reset_interval == 0:
+            self.reset_frame = i
+
+        scale = np.exp((i - self.reset_frame + 300) / self.factor)
+
+        # if i < self.reset_frame:
+        #     scale = np.exp(i / self.factor)
+        # else:
+        #     scale = np.exp((i - self.reset_frame + 200) / self.factor)
+
+        X = X * scale
+        Y = Y * scale
         return X.tolist(), Y.tolist()
 
     def __str__(self):
