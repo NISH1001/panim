@@ -9,20 +9,14 @@ sys.path.insert(0, path)
 
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use('dark_background')
 
-from panim.generative import (
-    GenerativeArt,
-    RandomlyVanishingPixelArt
-)
+plt.style.use("dark_background")
 
-from panim.experiments import (
-    RowArt
-)
+from panim.generative import GenerativeArt, RandomlyVanishingPixelArt
 
-from panim.flow import (
-    FlowAnimator
-)
+from panim.experiments import RowArt
+
+from panim.flow import FlowAnimator
 from panim.transformers import ZoomTransformer
 
 
@@ -33,10 +27,7 @@ def main():
     #     # gray=False
     # )
 
-    animator = RowArt(
-        width=800,
-        height=600,
-    )
+    animator = RowArt(width=800, height=600,)
     animator.animate(500)
     animator.save("out/rowart.mp4", fps=40)
 
@@ -47,6 +38,7 @@ def main():
     # )
     # animator.animate(1500)
     # animator.save("out/random5.mp4", fps=24)
+
 
 if __name__ == "__main__":
     main()
