@@ -62,7 +62,7 @@ Yeah. For now it can render "things" like:
 
 
 ## Disclaimer
-The code is experimental,  but does not harm to your system. 
+The code is experimental. But does not do harm to your system (if I am to be more optimistic than usual).
 Unless you are rendering a high resolution animation (for example 4K) with high FPS, the code works fine! 
 In case your machine lags while rendering, I am sure you have absurdly higher number of frames being rendered. 
 I will try to optimize in future times to come. Till then, have a look at the To-Do list.
