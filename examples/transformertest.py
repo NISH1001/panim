@@ -11,9 +11,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from panim.lsystem import LSystemAnimator, BranchedLSystemAnimator
-from panim.transformers import ZoomTransformer
+from panim.transformers import ZoomTransformer, RotationTransformer, TransformerPipeline
 
 plt.style.use("dark_background")
+plt.axis("off")
 
 
 def hilbert():
@@ -42,7 +43,7 @@ def test():
     axiom = "F+F+F+F"
     angle = 90
     iteration = 3
-    n = 75
+    n = 500
 
     angle = 22.5
     axiom = "F"
@@ -65,13 +66,20 @@ def test():
         axiom=axiom,
         turn_angle=angle,
         start_position=(0, -20),
-        nlimit=40,
+        nlimit=n,
         color=(1, 0, 0),
     )
 
-    zoomer = ZoomTransformer(animobj=animator, factor=2000, nlimit=n)
-    zoomer.animate(len(animator.coords))
-    zoomer.save("out/zoom-test-tree.mp4")
+    zoom_factor = 500
+    zoomer = ZoomTransformer(animobj=animator, factor=zoom_factor, nlimit=n)
+    rotator = RotationTransformer(animobj=animator, nlimit=n, rotation_angle=0.1)
+
+    pipeline = TransformerPipeline(
+        animobj=animator, color=(1, 1, 1), transformers=[zoomer, rotator]
+    )
+    obj = pipeline
+    obj.animate(len(animator.coords))
+    obj.save("out/zoom-test-tree.mp4")
 
 
 def main():

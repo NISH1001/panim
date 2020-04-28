@@ -17,7 +17,9 @@ Yeah. For now it can render "things" like:
 - Rain
 - Generative Arts
 - Double Pendulum
-- Zooming In and Out
+- Zooming In and Out (Transformer)
+- Scene Rotation (Transformer)
+- Pipeline for transformers
 - Random L-System
 - Multiple Combined Animation
 

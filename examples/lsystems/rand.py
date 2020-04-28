@@ -16,7 +16,7 @@ sys.path.insert(0, path)
 from panim.lsystem import LSystemAnimator, BranchedLSystemAnimator
 from panim.animator import CombinedAnimator
 from panim.utils import generate_random_color
-from panim.transformers import ZoomTransformer
+from panim.transformers import ZoomTransformer, RotationTransformer, TransformerPipeline
 
 plt.style.use("dark_background")
 plt.axis("off")
@@ -131,11 +131,11 @@ def generate_continuous(N):
 def multiple():
     axiom = "F"
     N = 5
-    iteration = 4
+    iteration = 5
     n = 500
 
     animators = []
-    nanimators = 100
+    nanimators = 25
     for i in range(nanimators):
         print("-" * 10)
         print(f"Animator number = {i}/{nanimators}")
@@ -173,13 +173,34 @@ def multiple():
         )
 
         factor = 150
+        zoomer = ZoomTransformer(animobj=animator, factor=factor)
+        zoomer_color = ZoomTransformer(animobj=animator, color=(1, 1, 1), factor=factor)
+
+        rotation_angle = 0.001
+        rotator = RotationTransformer(animobj=animator, factor=rotation_angle)
+        rotator_color = RotationTransformer(
+            animobj=animator, color=(1, 1, 1), factor=rotation_angle
+        )
+
+        pipeline = TransformerPipeline(animobj=animator, transformers=[zoomer, rotator])
+        pipeline_color = TransformerPipeline(
+            animobj=animator,
+            color=(1, 1, 1,),
+            transformers=[zoomer_color, rotator_color],
+        )
+
         if random.choice([True, True]):
-            animator = random.choice(
-                [
-                    ZoomTransformer(animobj=animator, factor=factor),
-                    ZoomTransformer(animobj=animator, color=(1, 1, 1), factor=factor),
-                ]
-            )
+            animator = random.choice([pipeline, pipeline_color])
+
+        # if random.choice([True, True]):
+        #     animator = random.choice(
+        #         [
+        #             zoomer,
+        #             zoomer_color
+        #             # ZoomTransformer(animobj=animator, factor=factor),
+        #             # ZoomTransformer(animobj=animator, color=(1, 1, 1), factor=factor),
+        #         ]
+        #     )
 
         print(animator)
         animators.append(animator)
@@ -191,7 +212,7 @@ def multiple():
     combined_animator.add_animators(animators)
 
     # nframes = max([len(animator.coords) for animator in animators])
-    nframes = 10000
+    nframes = 20000
     combined_animator.animate(nframes)
     combined_animator.save(f"out/random/random-{int(time.time())}.mp4", fps=25, dpi=100)
 
