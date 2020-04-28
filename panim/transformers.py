@@ -12,6 +12,16 @@ plt.style.use("dark_background")
 
 
 class Transformer(AbstractAnimator):
+    """
+        The main transformation base that other will inherit.
+
+        Every class has to implement `transform` method.
+        This method takes in frame number and co-orindates (x,y)
+        and perform the tnrasformation.
+
+        Gets all the attribute of the provided animator dynamically.
+    """
+
     def __init__(self, **kwargs):
         self.animobj = kwargs["animobj"]
         if "color" in kwargs:
@@ -34,10 +44,11 @@ class Transformer(AbstractAnimator):
 
 class ZoomTransformer(Transformer):
     """
-        Transform an animator object.
-        Gets all the attribute of the provided animator dynamically
-        and performs zoom-in/zoom-out transformation by scaling the
-        coordinates
+        Performs zoom-in/zoom-out transformation by scaling the
+        coordinates accorindlgy.
+        Exponential scaler is used for smooth zoom.
+        If direct single scalar is used, it will look too fast or too slow
+        and will have glitches.
     """
 
     def update(self, i):
@@ -73,10 +84,7 @@ class ZoomTransformer(Transformer):
 
 class RotationTransformer(Transformer):
     """
-        Transform an animator object.
-        Gets all the attribute of the provided animator dynamically
-        and performs zoom-in/zoom-out transformation by scaling the
-        coordinates
+        Rotate the coordinates around the origin.
     """
 
     # def __init__(self, **kwargs):
@@ -114,6 +122,11 @@ class RotationTransformer(Transformer):
 
 
 class TransformerPipeline(Transformer):
+    """
+        Holds list of transformation objects.
+        (x, y) -> T1 -> T2 -> .... (x', y')
+    """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.transformers = kwargs.get("transformers", [])

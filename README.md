@@ -64,7 +64,11 @@ Yeah. For now it can render "things" like:
 ## TO-DO
 Following are the things I have in my mind but I am too much lost in my own mind-cave that I have to find time to implement. :/
 
+- Add ~~ZoomTransformer~~
+- Add ~~RotationTransformer~~
+- Add ~~TransformerPipeline~~
 - Add PanTransformer to pan the animation scene
+- Optimize the renderer by removing points out the screen context.
 - Add a transformer to make old points vanish into the oblivion as redering progresses
 - Add artistic animation objects like circle, rectangle
 - Add the concept of camera
