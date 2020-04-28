@@ -61,12 +61,20 @@ Yeah. For now it can render "things" like:
 - [White Voids](https://www.youtube.com/watch?v=Q_KM3v3K3_I)
 
 
+## Disclaimer
+The code is experimental,  but does not harm to your system. 
+Unless you are rendering a high resolution animation (for example 4K) with high FPS, the code works fine! 
+In case your machine lags while rendering, I am sure you have absurdly higher number of frames being rendered. 
+I will try to optimize in future times to come. Till then, have a look at the To-Do list.
+
+I am sure there are many other better tools to perform similar tasks. This is solely for my own personal experiments.
+
 ## TO-DO
 Following are the things I have in my mind but I am too much lost in my own mind-cave that I have to find time to implement. :/
 
-- Add ~~ZoomTransformer~~
-- Add ~~RotationTransformer~~
-- Add ~~TransformerPipeline~~
+- ~~Add ZoomTransformer~~
+- ~~Add RotationTransformer~~
+- ~~Add TransformerPipeline~~
 - Add PanTransformer to pan the animation scene
 - Optimize the renderer by removing points out the screen context.
 - Add a transformer to make old points vanish into the oblivion as redering progresses
