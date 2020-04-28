@@ -38,6 +38,10 @@ class Transformer(AbstractAnimator):
         self.reset_interval = kwargs.get("reset_interval", None)
         # self.reset_interval = kwargs.get("reset_interval", 2500)
 
+    def update(self, i):
+        X, Y = self.animobj.update(i)
+        return self.transform(i, X, Y)
+
     def transform(self, i, X, Y):
         raise NotImplementedError
 
@@ -50,10 +54,6 @@ class ZoomTransformer(Transformer):
         If direct single scalar is used, it will look too fast or too slow
         and will have glitches.
     """
-
-    def update(self, i):
-        X, Y = self.animobj.update(i)
-        return self.transform(i, X, Y)
 
     def transform(self, i, X, Y):
         X = np.array(X)
@@ -97,10 +97,6 @@ class RotationTransformer(Transformer):
         return np.array(
             [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
         )
-
-    def update(self, i):
-        X, Y = self.animobj.update(i)
-        return self.transform(i, X, Y)
 
     def transform(self, i, X, Y):
         X = np.array(X)
