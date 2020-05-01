@@ -174,17 +174,19 @@ def multiple():
 
         factor = 150
         zoomer = ZoomTransformer(animobj=animator, factor=factor)
-        zoomer_color = ZoomTransformer(animobj=animator, color=(1, 1, 1), factor=factor)
+        zoomer_color = ZoomTransformer(
+            animobj=animator.copy(), color=(1, 1, 1), factor=factor
+        )
 
-        rotation_angle = 0.001
+        rotation_angle = 0.005
         rotator = RotationTransformer(animobj=animator, factor=rotation_angle)
         rotator_color = RotationTransformer(
-            animobj=animator, color=(1, 1, 1), factor=rotation_angle
+            animobj=animator.copy(), color=(1, 1, 1), factor=rotation_angle
         )
 
         pipeline = TransformerPipeline(animobj=animator, transformers=[zoomer, rotator])
         pipeline_color = TransformerPipeline(
-            animobj=animator,
+            animobj=animator.copy(),
             color=(1, 1, 1,),
             transformers=[zoomer_color, rotator_color],
         )

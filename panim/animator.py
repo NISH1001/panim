@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import copy
 import time
 
 import matplotlib.pyplot as plt
@@ -90,6 +91,9 @@ class AbstractAnimator(metaclass=ABCMeta):
         print("Saving {} to {}".format(self.__class__.__name__, filename))
         self.anim.save(filename, writer=writer, dpi=dpi)
         print(f"Time Taken = {time.time() - start} seconds")
+
+    def copy(self):
+        return copy.copy(self)
 
 
 class CombinedAnimator(AbstractAnimator):
