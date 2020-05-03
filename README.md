@@ -81,3 +81,4 @@ Following are the things I have in my mind but I am too much lost in my own mind
 - Add artistic animation objects like circle, rectangle
 - Add the concept of camera
 - Refactor project structure
+- Implement BOID for flocking behaviour
