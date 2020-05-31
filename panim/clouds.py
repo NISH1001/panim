@@ -6,9 +6,47 @@
 """
 
 
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial import distance_matrix
+
+
+class CloudGenerator:
+    def __init__(self, width=100, height=100, npoints=7):
+        self.width, self.height = width, height
+        self.npoints = npoints if npoints else self.width // 6
+        self.array = np.zeros((self.height, self.width))
+
+    def generate(self, npoints=None):
+        h, w = self.height, self.width
+        npoints = self.npoints if not npoints else npoints
+        print(f"Generating clouds for npoint = {npoints}")
+        arr = np.zeros(h * w)
+        indices = np.arange(len(arr))
+        np.random.shuffle(indices)
+        indices = indices[:npoints]
+        arr[indices] = 255
+        arr = np.reshape(arr, (h, w))
+
+        indices2d = np.unravel_index(indices, (h, w))
+        points = list(zip(indices2d[0], indices2d[1]))
+
+        res = np.reshape(arr, (h, w)).copy()
+        for r in range(h):
+            for c in range(w):
+                point = np.array([c, r])
+                dist = min([euclidean(point, p) for p in points])
+                dist = min(dist, 255)
+                res[r, c] = dist
+        return 255 - res
+
+    def __str__(self):
+        w, h, n = self.width, self.height, self.npoints
+        return f"CloudGenerator = ({w}, {h}, {n})"
+
+    def __repr__(self):
+        return str(self)
 
 
 def euclidean(p1, p2):
@@ -63,7 +101,8 @@ def cloud2():
 
 
 def cloud1():
-    s = 100
+    s = int(sys.argv[1])
+    # s = 100
     w, h = s, s
     npoints = s // 6
     arr = np.zeros(h * w)
@@ -99,8 +138,13 @@ def cloud1():
 
 
 def main():
-    cloud1()
+    # cloud1()
     # cloud2()
+    s = 200
+    cg = CloudGenerator(width=s, height=s, npoints=30)
+    img = cg.generate()
+    plt.imshow(img, cmap="gray")
+    plt.show()
 
 
 if __name__ == "__main__":
