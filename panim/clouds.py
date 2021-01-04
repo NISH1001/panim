@@ -7,6 +7,8 @@
 
 
 import sys
+
+import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial import distance_matrix
@@ -140,10 +142,17 @@ def cloud1():
 def main():
     # cloud1()
     # cloud2()
-    s = 200
-    cg = CloudGenerator(width=s, height=s, npoints=30)
+    s = 100
+    plt.style.use("dark_background")
+    cg = CloudGenerator(width=s, height=s, npoints=25)
     img = cg.generate()
     plt.imshow(img, cmap="gray")
+    plt.axis("off")
+    plt.show()
+    img = cv2.resize(img, None, fx=3, fy=3)
+    plt.imshow(img, cmap="gray")
+    plt.axis("off")
+    plt.savefig("tmp/test00.png")
     plt.show()
 
 

@@ -61,16 +61,17 @@ class CloudGenerativeArt(AbstractImageAnimator):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.array = np.zeros((self.image_size[1], self.image_size[0]))
-        self.cg = CloudGenerator(
-            width=self.image_size[1], height=self.image_size[0], npoints=0
-        )
+        # self.cg = CloudGenerator(
+        #     width=self.image_size[1], height=self.image_size[0], npoints=0
+        # )
+        self.cg = CloudGenerator(width=100, height=100)
 
     def update(self, i):
         w, h = self.cg.width, self.cg.height
         npoints = (i + 5 % 30) + 1
-        # npoints = 1
-        arr = self.cg.generate(npoints=npoints).astype(float)
-        arr = cv2.resize(arr, None, fx=2, fy=2)
+        npoints = 20
+        arr = self.cg.generate(npoints=npoints)
+        # arr = cv2.resize(arr, None, fx=2, fy=2)
         # cv2.imwrite(f"tmp/test-{i}.png", arr)
         # # plt.savefig(f"test-{i}.png")
         return arr / 255

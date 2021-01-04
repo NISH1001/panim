@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+import os
+
+import time
+import datetime
+import calendar
+
 import numpy as np
 from PIL import Image
 
@@ -65,8 +71,31 @@ def generate_random_color(normalize=True):
     return c
 
 
+class IAmTime:
+    def __init__(self):
+        now = datetime.datetime.now()
+        month = now.strftime("%m")
+        day = now.strftime("%d")
+        self.month = str(month.lower())
+        self.year = now.year
+        self.day = day
+        self.hour = now.hour
+        self.minute = now.minute
+        self.second = now.second
+
+    def __repr__(self) -> str:
+        return f"(year={self.year}, month={self.month}, day={self.day}, hour={self.hour}, minute={self.minute}, second={self.second})"
+
+
+def create_directory(path: str):
+    if not os.path.exists(path):
+        print(f"Creating directory = {path}")
+        os.makedirs(path)
+
+
 def main():
-    pass
+    iat = IAmTime()
+    print(iat)
 
 
 if __name__ == "__main__":

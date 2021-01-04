@@ -15,7 +15,7 @@ sys.path.insert(0, path)
 
 from panim.lsystem import LSystemAnimator, BranchedLSystemAnimator
 from panim.animator import CombinedAnimator
-from panim.utils import generate_random_color
+from panim.utils import generate_random_color, IAmTime, create_directory
 from panim.transformers import ZoomTransformer, RotationTransformer, TransformerPipeline
 
 plt.style.use("dark_background")
@@ -124,18 +124,18 @@ def generate_branched(N):
 
 def generate_continuous(N):
     symbols = list("F+-|")
-    main = np.random.choice(symbols, N, p=[0.4, 0.2, 0.1, 0.3]).tolist()
+    main = np.random.choice(symbols, N, p=[0.4, 0.4, 0.1, 0.1]).tolist()
     return {"F": "".join(main)}
 
 
 def multiple():
     axiom = "F"
     N = 5
-    iteration = 5
-    n = 500
+    iteration = 4
+    n = 300
 
     animators = []
-    nanimators = 25
+    nanimators = 50
     for i in range(nanimators):
         print("-" * 10)
         print(f"Animator number = {i}/{nanimators}")
@@ -178,7 +178,7 @@ def multiple():
             animobj=animator.copy(), color=(1, 1, 1), factor=factor
         )
 
-        rotation_angle = 0.005
+        rotation_angle = random.choice([0.005, -0.005])
         rotator = RotationTransformer(animobj=animator, factor=rotation_angle)
         rotator_color = RotationTransformer(
             animobj=animator.copy(), color=(1, 1, 1), factor=rotation_angle
@@ -187,7 +187,11 @@ def multiple():
         pipeline = TransformerPipeline(animobj=animator, transformers=[zoomer, rotator])
         pipeline_color = TransformerPipeline(
             animobj=animator.copy(),
-            color=(1, 1, 1,),
+            color=(
+                1,
+                1,
+                1,
+            ),
             transformers=[zoomer_color, rotator_color],
         )
 
@@ -209,14 +213,25 @@ def multiple():
         print("-" * 10)
 
     combined_animator = CombinedAnimator(
-        interval=1, nlimit=n, line_width=1, color=(1, 1, 1), verbose=True,
+        interval=1,
+        nlimit=n,
+        line_width=1,
+        color=(1, 1, 1),
+        verbose=True,
     )
     combined_animator.add_animators(animators)
 
     # nframes = max([len(animator.coords) for animator in animators])
     nframes = 20000
     combined_animator.animate(nframes)
-    combined_animator.save(f"out/random/random-{int(time.time())}.mp4", fps=25, dpi=100)
+    iat = IAmTime()
+    directory = f"out/random/{iat.year}-{iat.month}"
+    create_directory(directory)
+    combined_animator.save(
+        f"{directory}/random-{iat.day}--{iat.hour}.{iat.minute}.{iat.second}.mp4",
+        fps=30,
+        dpi=100,
+    )
 
 
 def main():

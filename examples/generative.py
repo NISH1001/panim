@@ -32,8 +32,8 @@ def main():
     # )
 
     # animator = RowArt(width=800, height=600,)
-    animator = CloudGenerativeArt(width=200, height=200)
-    animator.animate(100)
+    animator = CloudGenerativeArt(width=800, height=600, wres=12.8, hres=7.68)
+    animator.animate(200)
     animator.save("out/clouds/test.mp4", fps=10)
 
     # animator = FlowAnimator(
