@@ -5,15 +5,16 @@ import matplotlib.pyplot as plt
 
 from panim.animator import AbstractAnimator
 
-plt.style.use('dark_background')
+plt.style.use("dark_background")
+
 
 class BoxSizeAnimator(AbstractAnimator):
     def __init__(self, **args):
         super().__init__(**args)
-        self.size = args['size']
+        self.size = args["size"]
         self.val = 1
-        self.toggle = args.get('toggle', False)
-        self.factor = args['factor']
+        self.toggle = args.get("toggle", False)
+        self.factor = args["factor"]
         self.coords = np.array([(-1, -1), (-1, 1), (1, 1), (1, -1), (-1, -1)])
 
     def update(self, i):
@@ -26,6 +27,7 @@ class BoxSizeAnimator(AbstractAnimator):
         # self.coords = self.coords * self.factor
         return X, Y
 
+
 def main():
     animator = BoxSizeAnimator(
         interval=5,
@@ -33,11 +35,11 @@ def main():
         factor=-0.05,
         toggle=True,
         line_width=3,
-        title='Phasing Out - Paradox'
+        title="Phasing Out - Paradox",
     )
     animator.animate(2100)
     animator.save("out/box2.mp4")
 
+
 if __name__ == "__main__":
     main()
-

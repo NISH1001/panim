@@ -13,24 +13,24 @@ DEGREES_TO_RADIANS = np.pi / 180
 
 class LSystem:
     """
-        This is used to simulate Lindenmayer System.
+    This is used to simulate Lindenmayer System.
 
-        axiom:
-            initial sequence (base)
-        rule:
-            transformation rule to apply to sequence
-        turn_angle:
-            anglye by which the turtle is rotated (+ve turn implies clockwise)
-        iteration:
-            total number of times the transfomration is applied successively to sequence
+    axiom:
+        initial sequence (base)
+    rule:
+        transformation rule to apply to sequence
+    turn_angle:
+        anglye by which the turtle is rotated (+ve turn implies clockwise)
+    iteration:
+        total number of times the transfomration is applied successively to sequence
 
 
-        The Symbols in the sequence after applying transformation are meant as:
-            F : move 1 unit forward and also draw line while doing so
-            f : move 1 unit forward without tracing a line
-            + : rotate clockwise without moving forward
-            - : rotate counter-clockwise without moving forward
-            | : rotate by 180 degree
+    The Symbols in the sequence after applying transformation are meant as:
+        F : move 1 unit forward and also draw line while doing so
+        f : move 1 unit forward without tracing a line
+        + : rotate clockwise without moving forward
+        - : rotate counter-clockwise without moving forward
+        | : rotate by 180 degree
 
     """
 
@@ -46,10 +46,10 @@ class LSystem:
 
     def transform_sequence(self, sequence, rule):
         """
-            Apply transformation to the sequence based on the rule.
+        Apply transformation to the sequence based on the rule.
 
-            rule:
-                a dictionary with mapping from a symbol to new symbol
+        rule:
+            a dictionary with mapping from a symbol to new symbol
         """
         return "".join(rule.get(c, c) for c in sequence)
 
@@ -61,15 +61,15 @@ class LSystem:
 
     def invoke(self):
         """
-            A generator expression wrapper around simulate_turtle.
+        A generator expression wrapper around simulate_turtle.
         """
         for c in self.simulate_turtle(self.seq, self.start_position, self.turn_angle):
             yield c
 
     def get_coordinates(self):
         """
-            Return list of all the coordinates.
-            This is an alternate to `invoke`.
+        Return list of all the coordinates.
+        This is an alternate to `invoke`.
         """
         return [
             c
@@ -118,34 +118,31 @@ class LSystem:
                 # yield (x, y)
 
     def __str__(self):
-        return (
-            f"~{self.__class__.__name__}~\n"
-            + "Axiom={}\nRule={}\nTurn Angle={}\nIterations={}\nFinal Sequence Length={}\nStart Position={}".format(
-                self.axiom,
-                self.rule,
-                self.turn_angle,
-                self.iteration,
-                len(self.seq),
-                self.start_position,
-            )
+        return f"~{self.__class__.__name__}~\n" + "Axiom={}\nRule={}\nTurn Angle={}\nIterations={}\nFinal Sequence Length={}\nStart Position={}".format(
+            self.axiom,
+            self.rule,
+            self.turn_angle,
+            self.iteration,
+            len(self.seq),
+            self.start_position,
         )
 
 
 class BranchedLSystem(LSystem):
     """
-        A more complicated L-System in which we create discontinuity
-        so that we can branch off at some parts, remembering the states.
-        This is used to create complicated fractals like Tree Branches.
+    A more complicated L-System in which we create discontinuity
+    so that we can branch off at some parts, remembering the states.
+    This is used to create complicated fractals like Tree Branches.
 
-        This system has two more symbols: '[' and ']'
-            F : move 1 unit forward and also draw line while doing so
-            f : move 1 unit forward without tracing a line
-            + : rotate clockwise without moving forward
-            - : rotate counter-clockwise without moving forward
-            [ : push (save) state (position and angle)
-                (kind of: "remember 'this'")
-            ] : pop state (position and angle)
-                (kind of: "go back to that last remember state")
+    This system has two more symbols: '[' and ']'
+        F : move 1 unit forward and also draw line while doing so
+        f : move 1 unit forward without tracing a line
+        + : rotate clockwise without moving forward
+        - : rotate counter-clockwise without moving forward
+        [ : push (save) state (position and angle)
+            (kind of: "remember 'this'")
+        ] : pop state (position and angle)
+            (kind of: "go back to that last remember state")
 
     """
 
