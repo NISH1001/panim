@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+
 import copy
 import time
 
@@ -10,6 +12,10 @@ from abc import ABCMeta, ABC, abstractmethod
 from abc import ABC, abstractmethod
 
 import numpy as np
+
+from loguru import logger
+
+from .utils import IAmTime, create_directory
 
 plt.style.use("dark_background")
 
@@ -60,7 +66,7 @@ class AbstractAnimator(metaclass=ABCMeta):
             of (X, Y) values
         """
         if self.verbose:
-            print("Frame {}/{}".format(i, self.num_frames))
+            print("Frame {i}/{self.num_frames}")
         res = self.update(i)
         if type(res) is list:
             for j, img in enumerate(self.img):
@@ -84,13 +90,49 @@ class AbstractAnimator(metaclass=ABCMeta):
             repeat=False,
         )
 
-    def save(self, filename="out/animation.mp4", fps=30, dpi=100):
+    def save(
+        self, filename: str = None, prefix: str = "", fps: int = 30, dpi: int = 100
+    ):
         start = time.time()
-        writer = animation.writers["ffmpeg"](fps=fps)
+        cname = self.__class__.__name__ if not prefix else prefix
+
+        iat = IAmTime()
+        if not filename:
+            outdir = self.autogenerate_path()
+            filename = f"{cname}-{iat.year}-{iat.month}-{iat.day}--{iat.hour}.{iat.minute}.{iat.second}.mp4"
+            if prefix:
+                filename = f"{prefix}-{filename}"
+            create_directory(outdir)
+            filename = os.path.join(outdir, filename)
+        else:
+            basedir = os.path.dirname(filename)
+            if not basedir or not basedir.startswith("out"):
+                basedir = "out/"
+            create_directory(basedir)
+
+            _, ext = os.path.splitext(filename)
+            if ext and ext != ".mp4":
+                raise ValueError(f"(filename={filename}). Extension has to be mp4")
+
+            if not ext:
+                ext = ".mp4"
+
+            basename, _ = os.path.splitext(os.path.basename(filename))
+            fname = f"{cname}-{basename}{ext}"
+            filename = os.path.join(basedir, fname)
+
         # self.anim.save(filename, writer='imagemagick')
-        print("Saving {} to {}".format(self.__class__.__name__, filename))
+        logger.info(f"Saving {cname} to {filename}")
+        writer = animation.writers["ffmpeg"](fps=fps)
         self.anim.save(filename, writer=writer, dpi=dpi)
-        print(f"Time Taken = {time.time() - start} seconds")
+        logger.debug(f"Time Taken = {time.time() - start} seconds")
+
+    def autogenerate_path(self):
+        iat = IAmTime()
+        basepath = "out/"
+        cname = self.__class__.__name__
+        timepath = f"{iat.year}--{iat.month}"
+        return os.path.join(basepath, cname, timepath)
 
     def copy(self):
         return copy.copy(self)
@@ -148,7 +190,7 @@ class AbstractImageAnimator(AbstractAnimator):
             self.image = plt.imshow(self.array, animated=True)
 
     def _animate(self, i):
-        print("Frame {}/{}".format(i, self.num_frames))
+        print(f"Frame {i}/{self.num_frames}")
         array = self.update(i)
         self.image.set_array(array)
         return (self.image,)

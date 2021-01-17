@@ -14,7 +14,10 @@ from matplotlib import animation
 from abc import ABCMeta, ABC, abstractmethod
 from abc import ABC, abstractmethod
 
+
 import numpy as np
+
+from loguru import logger
 
 from panim.animator import AbstractAnimator, AbstractImageAnimator
 
@@ -45,7 +48,6 @@ class ImageAnimator(AbstractAnimator):
         return np.sin(x) + np.cos(y)
 
     def update(self, i):
-        print(i)
         # self.x += np.pi / 15.
         # self.y += np.pi / 20.
         self.img += 10
@@ -240,8 +242,8 @@ class MetaBall4(AbstractImageAnimator):
         # velocity
         self.balls["direction"] = np.random.choice([-1, 0.5, 1], (nballs, 2)) * 2.5
 
-        r = np.mean(self.image_size) // 10
-        print(f"Max radius = {r}")
+        r = np.mean(self.image_size) // 13
+        logger.info(f"Max radius = {r}")
         self.balls["radius"] = np.random.randint(5, r, (nballs,))
         self.array = np.zeros((self.image_size[1], self.image_size[0]))
 
@@ -273,7 +275,6 @@ class MetaBall4(AbstractImageAnimator):
         return xs, ys
 
     def update(self, i):
-        print(i)
         arr = np.zeros_like(self.array)
         nr, nc = arr.shape
         # xs = np.arange(0, nc, 1)
@@ -324,12 +325,14 @@ class MetaBall4(AbstractImageAnimator):
 
             # x < 0, set direction +ve
             if center[0] - radius < 0:
-                direction[0] *= np.random.uniform(0.5, 1, (1,))
+                # direction[0] *= np.random.uniform(0.5, 1, (1,))
+                direction[0] *= np.random.uniform(-1, -0.5, (1,))
                 center[0] = radius
 
             # y < 0, set direction +ve
             if center[1] - radius < 0:
-                direction[1] *= np.random.uniform(0.5, 1, (1,))
+                # direction[1] *= np.random.uniform(0.5, 1, (1,))
+                direction[1] *= np.random.uniform(-1, -0.5, (1,))
                 center[1] = radius
 
             self.balls["direction"][i] = direction
@@ -361,10 +364,10 @@ def main():
     #     n=11,
     # )
     # animator = MetaBall4(nballs=5, width=200, height=200)
-    animator = MetaBall4(nballs=15, width=500, height=500)
-    print(animator)
+    animator = MetaBall4(nballs=15, width=500, height=400)
+    logger.info(animator)
     animator.animate(500)
-    animator.save("out/metaballs-fps-24-balls-20.mp4", fps=24)
+    animator.save(fps=24)
 
 
 if __name__ == "__main__":
