@@ -232,7 +232,7 @@ class MetaBall4(AbstractImageAnimator):
             ],
         )
         self.balls["center"] = np.random.uniform(0, 50, (nballs, 2))
-        self.balls["direction"] = np.random.choice([-1, 0.1, 1], (nballs, 2))
+        self.balls["direction"] = np.random.choice([-1, 0.5, 1], (nballs, 2)) * 2
         self.balls["radius"] = np.random.randint(1, 10, (nballs,))
         self.array = np.zeros((self.image_size[1], self.image_size[0]))
         # self.img = self.ax.scatter(
@@ -249,43 +249,66 @@ class MetaBall4(AbstractImageAnimator):
         y = (radius * np.sin(theta) + center[1]).astype(int)
         return x, y
 
+    def _generate_all_points_within(self, center, radius, npoints=10):
+        radii = np.linspace(0.1, radius, 10)
+        xs, ys = [], []
+        for r in radii:
+            _x, _y = self._generate_circular_points(center, r, npoints)
+            xs.extend(_x)
+            ys.extend(_y)
+        return xs, ys
+
     def update(self, i):
         print(i)
         arr = np.zeros_like(self.array)
         nr, nc = arr.shape
-        xs = np.linspace(-1, 1, nc)
-        ys = np.linspace(-1, 1, nr)
+        # xs = np.linspace(0, 1, nc)
+        # ys = np.linspace(-1, 1, nr)
+        xs = np.arange(0, nc, 1)
+        ys = np.arange(0, nr, 1)
+
+        # # generate circle
+        # for rad, cent in zip(self.balls["radius"], self.balls["center"]):
+        #     # generate points
+        #     # x, y = self._generate_circular_points(cent, rad, npoints=50)
+        #     x, y = self._generate_all_points_within(cent, rad, npoints=25)
+        #     x = np.clip(x, a_min=0, a_max=nc - 1)
+        #     y = np.clip(y, a_min=0, a_max=nr - 1)
+        #     arr[y, x] = 255
 
         for col, x in enumerate(xs):
             for row, y in enumerate(ys):
+                vals = 0
                 for rad, cent in zip(self.balls["radius"], self.balls["center"]):
-                    # generate points
-                    x, y = self._generate_circular_points(cent, rad)
-                    x = np.clip(x, a_min=0, a_max=nc - 1)
-                    y = np.clip(y, a_min=0, a_max=nr - 1)
-                    arr[y, x] = 255
+                    val = (x - cent[0]) ** 2 + (y - cent[1]) ** 2
+                    vals = vals + rad ** 2 / val if val else vals
+                arr[y][x] = vals
+
+        # update position based on velocity
         self.balls["center"] += self.balls["direction"]
+
+        # check for collision with edges
         for i, (center, radius, direction) in enumerate(
             zip(self.balls["center"], self.balls["radius"], self.balls["direction"])
         ):
             # x > width, reset direction to be -ve
             if center[0] > nc - radius:
-                direction[0] *= np.random.uniform(-1, -0.1, (1,))
+                direction[0] *= np.random.uniform(-1, -0.5, (1,))
                 center[0] = nc - radius
 
             # y > height, reset direction to be -ve
             if center[1] > nr - radius:
-                direction[1] *= np.random.uniform(-1, -0.1, (1,))
+                direction[1] *= np.random.uniform(-1, -0.5, (1,))
                 center[1] = nr - radius
 
             # x < 0, set direction +ve
             if center[0] - radius < 0:
-                direction[0] *= np.random.uniform(0.1, 1, (1,))
+                direction[0] *= np.random.uniform(0.5, 1, (1,))
                 center[0] = radius
 
             # y < 0, set direction +ve
             if center[1] - radius < 0:
-                direction[1] *= np.random.uniform(0.1, 1, (1,))
+                direction[1] *= np.random.uniform(0.5, 1, (1,))
                 center[1] = radius
 
             self.balls["direction"][i] = direction
@@ -313,9 +336,10 @@ def main():
     #     height=400,
     #     n=11,
     # )
-    animator = MetaBall4(nballs=5, width=100, height=100)
-    animator.animate(250)
-    animator.save("out/metaball.mp4", fps=8)
+    # animator = MetaBall4(nballs=5, width=200, height=200)
+    animator = MetaBall4(nballs=3, width=50, height=50)
+    animator.animate(500)
+    animator.save("out/metaballs.mp4", fps=8)
 
 
 if __name__ == "__main__":
