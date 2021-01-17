@@ -222,7 +222,6 @@ class MetaBall4(AbstractImageAnimator):
     def __init__(self, nballs=5, **kwargs):
         super().__init__(**kwargs)
         self.nballs = nballs
-        self.centers = np.random.randint(0, 50, (nballs, 2))
         self.balls = np.zeros(
             nballs,
             dtype=[
@@ -231,25 +230,40 @@ class MetaBall4(AbstractImageAnimator):
                 ("direction", float, 2),
             ],
         )
-        self.balls["center"] = np.random.uniform(0, 50, (nballs, 2))
-        self.balls["direction"] = np.random.choice([-1, 0.5, 1], (nballs, 2)) * 2
-        self.balls["radius"] = np.random.randint(1, 10, (nballs,))
+
+        # random x
+        # image_size = (w, h)
+        self.balls["center"][:, 0] = np.random.uniform(0, self.image_size[0], (nballs,))
+        # random y
+        self.balls["center"][:, 1] = np.random.uniform(0, self.image_size[1], (nballs,))
+
+        # velocity
+        self.balls["direction"] = np.random.choice([-1, 0.5, 1], (nballs, 2)) * 2.5
+
+        r = np.mean(self.image_size) // 10
+        print(f"Max radius = {r}")
+        self.balls["radius"] = np.random.randint(5, r, (nballs,))
         self.array = np.zeros((self.image_size[1], self.image_size[0]))
-        # self.img = self.ax.scatter(
-        #     self.balls["center"][:, 0],
-        #     self.balls["center"][:, 1],
-        #     s=self.balls["radius"],
-        #     lw=0.5,
-        #     facecolors="none",
-        # )
+
+        # grid points
+        self.grid = np.zeros((self.image_size[1], self.image_size[0], 2))
+        for px in range(self.image_size[0]):
+            for py in range(self.image_size[1]):
+                self.grid[py][px] = px, py
 
     def _generate_circular_points(self, center, radius, npoints=10):
+        """
+        Generate npoints on the circle's circumference
+        """
         theta = np.random.uniform(0, 2 * np.pi, npoints)
         x = (radius * np.cos(theta) + center[0]).astype(int)
         y = (radius * np.sin(theta) + center[1]).astype(int)
         return x, y
 
     def _generate_all_points_within(self, center, radius, npoints=10):
+        """
+        Generate points within + on the circle
+        """
         radii = np.linspace(0.1, radius, 10)
         xs, ys = [], []
         for r in radii:
@@ -262,12 +276,12 @@ class MetaBall4(AbstractImageAnimator):
         print(i)
         arr = np.zeros_like(self.array)
         nr, nc = arr.shape
-        # xs = np.linspace(0, 1, nc)
-        # ys = np.linspace(-1, 1, nr)
-        xs = np.arange(0, nc, 1)
-        ys = np.arange(0, nr, 1)
+        # xs = np.arange(0, nc, 1)
+        # ys = np.arange(0, nr, 1)
 
         # # generate circle
+        # TODO: Create separate animation element for simple circle
+        # TODO: Detect collision between circl;
         # for rad, cent in zip(self.balls["radius"], self.balls["center"]):
         #     # generate points
         #     # x, y = self._generate_circular_points(cent, rad, npoints=50)
@@ -276,13 +290,20 @@ class MetaBall4(AbstractImageAnimator):
         #     y = np.clip(y, a_min=0, a_max=nr - 1)
         #     arr[y, x] = 255
 
-        for col, x in enumerate(xs):
-            for row, y in enumerate(ys):
-                vals = 0
-                for rad, cent in zip(self.balls["radius"], self.balls["center"]):
-                    val = (x - cent[0]) ** 2 + (y - cent[1]) ** 2
-                    vals = vals + rad ** 2 / val if val else vals
-                arr[y][x] = vals
+        # for col, x in enumerate(xs):
+        #     for row, y in enumerate(ys):
+        #         vals = 0
+        #         for rad, cent in zip(self.balls["radius"], self.balls["center"]):
+        #             val = (x - cent[0]) ** 2 + (y - cent[1]) ** 2
+        #             vals = vals + rad ** 2 / val if val else vals
+        #         arr[y][x] = vals
+
+        # vectorized
+        for rad, cent in zip(self.balls["radius"], self.balls["center"]):
+            dist = self.grid - cent
+            # square to remove any -ve pixel values
+            dist = np.hypot(dist[:, :, 0], dist[:, :, 1]) ** 2
+            arr += rad ** 2 / dist
 
         # update position based on velocity
         self.balls["center"] += self.balls["direction"]
@@ -316,6 +337,9 @@ class MetaBall4(AbstractImageAnimator):
 
         return arr
 
+    def __str__(self):
+        return f"(nballs={self.nballs}), (image_size={self.image_size})"
+
 
 def main():
     # animator = AbstractAnimator() # we cannot initialize this
@@ -337,9 +361,10 @@ def main():
     #     n=11,
     # )
     # animator = MetaBall4(nballs=5, width=200, height=200)
-    animator = MetaBall4(nballs=3, width=50, height=50)
+    animator = MetaBall4(nballs=15, width=500, height=500)
+    print(animator)
     animator.animate(500)
-    animator.save("out/metaballs.mp4", fps=8)
+    animator.save("out/metaballs-fps-24-balls-20.mp4", fps=24)
 
 
 if __name__ == "__main__":

@@ -44,20 +44,20 @@ class AbstractAnimator(metaclass=ABCMeta):
     @abstractmethod
     def update(self, i):
         """
-            Do calculation and return either (X, Y) or a list of (X, Y)
+        Do calculation and return either (X, Y) or a list of (X, Y)
         """
         pass
 
     def _animate(self, i):
         """
-            Internal animation function that calls handles animation
-            by calling update()
+        Internal animation function that calls handles animation
+        by calling update()
 
-            If self.img is a single plot() object,
-                then update() returns (X, Y) values to be used
+        If self.img is a single plot() object,
+            then update() returns (X, Y) values to be used
 
-            If self.img is a list of several plot(), update() returns a list
-                of (X, Y) values
+        If self.img is a list of several plot(), update() returns a list
+            of (X, Y) values
         """
         if self.verbose:
             print("Frame {}/{}".format(i, self.num_frames))
@@ -98,7 +98,7 @@ class AbstractAnimator(metaclass=ABCMeta):
 
 class CombinedAnimator(AbstractAnimator):
     """
-        A class to hold render multiple animator instances
+    A class to hold render multiple animator instances
     """
 
     def __init__(self, **args):
@@ -131,6 +131,8 @@ class AbstractImageAnimator(AbstractAnimator):
         self.interval = args.get("interval", 1)
         self.gray = args.get("gray", True)
         self.fig = plt.figure()
+
+        # (w, h)
         self.image_size = (args.get("width", 800), args.get("height", 600))
         self.wres, self.hres = (args.get("wres", 12), args.get("hres", 9))
         w, h = self.image_size
