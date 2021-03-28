@@ -18,14 +18,19 @@ from panim.transformers import ZoomTransformer, TransformerPipeline, RotationTra
 
 
 def disappointment():
-    n = 25
+    rotation_angle = 0.05
+    n = 75
     animator = SpiralAnimator2(
         interval=50,
         scale=0.4,
         nlimit=n,
-        npoints=50,
+        npoints=75,
         factor=0.001,
     )
+    zoomer = ZoomTransformer(animobj=animator, factor=1000, nlimit=n)
+    rotator = RotationTransformer(animobj=animator, factor=rotation_angle)
+
+    animator = TransformerPipeline(animobj=animator, transformers=[zoomer, rotator])
     animator.animate(9000)
     animator.save("out/spiral2.mp4")
 
@@ -44,8 +49,8 @@ def test():
 
 
 def main():
-    # disappointment()
-    test()
+    disappointment()
+    # test()
 
 
 if __name__ == "__main__":
