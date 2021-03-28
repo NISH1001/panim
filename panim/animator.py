@@ -66,7 +66,7 @@ class AbstractAnimator(metaclass=ABCMeta):
             of (X, Y) values
         """
         if self.verbose:
-            print("Frame {i}/{self.num_frames}")
+            print(f"Frame {i}/{self.num_frames}")
         res = self.update(i)
         if type(res) is list:
             for j, img in enumerate(self.img):

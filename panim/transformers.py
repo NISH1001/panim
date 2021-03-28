@@ -10,27 +10,38 @@ from panim.lsystem import LSystemAnimator
 
 plt.style.use("dark_background")
 
+from loguru import logger
+
 
 class Transformer(AbstractAnimator):
     """
-        The main transformation base that other will inherit.
+    The main transformation base that other will inherit.
 
-        Every class has to implement `transform` method.
-        This method takes in frame number and co-orindates (x,y)
-        and perform the tnrasformation.
+    Every class has to implement `transform` method.
+    This method takes in frame number and co-orindates (x,y)
+    and perform the tnrasformation.
 
-        Gets all the attribute of the provided animator dynamically.
+    Gets all the attribute of the provided animator dynamically.
     """
 
     def __init__(self, **kwargs):
         self.animobj = kwargs["animobj"]
+
+        # override color attribute
         if "color" in kwargs:
+            logger.warning("Overriding color attribute!")
             try:
                 self.animobj.__dict__.pop("color")
                 self.animobj.__dict__["args"].pop("color")
             except KeyError:
                 pass
-        kwargs.update(self.animobj.__dict__["args"])
+        dct = self.animobj.__dict__["args"].copy()
+
+        # if "factor" attribute clashes
+        if "factor" in dct:
+            dct.pop("factor")
+        kwargs.update(dct)
+
         super().__init__(**kwargs)
         self.__dict__.update(self.animobj.__dict__)
         self.factor = kwargs.get("factor", 1.0)
@@ -48,11 +59,11 @@ class Transformer(AbstractAnimator):
 
 class ZoomTransformer(Transformer):
     """
-        Performs zoom-in/zoom-out transformation by scaling the
-        coordinates accorindlgy.
-        Exponential scaler is used for smooth zoom.
-        If direct single scalar is used, it will look too fast or too slow
-        and will have glitches.
+    Performs zoom-in/zoom-out transformation by scaling the
+    coordinates accorindlgy.
+    Exponential scaler is used for smooth zoom.
+    If direct single scalar is used, it will look too fast or too slow
+    and will have glitches.
     """
 
     def transform(self, i, X, Y):
@@ -84,7 +95,7 @@ class ZoomTransformer(Transformer):
 
 class RotationTransformer(Transformer):
     """
-        Rotate the coordinates around the origin.
+    Rotate the coordinates around the origin.
     """
 
     # def __init__(self, **kwargs):
@@ -119,8 +130,8 @@ class RotationTransformer(Transformer):
 
 class TransformerPipeline(Transformer):
     """
-        Holds list of transformation objects.
-        (x, y) -> T1 -> T2 -> .... (x', y')
+    Holds list of transformation objects.
+    (x, y) -> T1 -> T2 -> .... (x', y')
     """
 
     def __init__(self, **kwargs):

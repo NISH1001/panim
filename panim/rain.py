@@ -36,7 +36,7 @@ class RainAnimator:
             ],
         )
         self.drops["position"] = np.random.uniform(0, 1, (ndrops, 2))
-        self.drops["growth"] = np.random.uniform(50, 200, ndrops)
+        self.drops["growth"] = np.random.uniform(1, 10, ndrops)
         self.img = self.ax.scatter(
             self.drops["position"][:, 0],
             self.drops["position"][:, 1],

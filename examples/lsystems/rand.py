@@ -135,7 +135,7 @@ def multiple():
     n = 300
 
     animators = []
-    nanimators = 50
+    nanimators = 19
     for i in range(nanimators):
         print("-" * 10)
         print(f"Animator number = {i}/{nanimators}")
@@ -229,7 +229,7 @@ def multiple():
     create_directory(directory)
     combined_animator.save(
         f"{directory}/random-{iat.day}--{iat.hour}.{iat.minute}.{iat.second}.mp4",
-        fps=30,
+        fps=24,
         dpi=100,
     )
 

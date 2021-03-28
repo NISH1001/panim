@@ -9,16 +9,17 @@ sys.path.insert(0, path)
 
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use('dark_background')
+
+plt.style.use("dark_background")
 
 from panim.rain import RainAnimator
 
 
 def main():
-    r = RainAnimator(ndrops = 150)
+    r = RainAnimator(ndrops=50)
     r.animate(2000)
     r.save("out/rain.mp4")
 
+
 if __name__ == "__main__":
     main()
-
