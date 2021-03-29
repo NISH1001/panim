@@ -31,7 +31,8 @@ def disappointment():
     rotator = RotationTransformer(animobj=animator, factor=rotation_angle)
 
     animator = TransformerPipeline(animobj=animator, transformers=[zoomer, rotator])
-    animator.animate(9000)
+    # animator.animate(100)
+    animator.animate(fps=30, timespan=5)
     animator.save("out/spiral2.mp4")
 
 

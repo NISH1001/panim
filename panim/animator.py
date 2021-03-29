@@ -78,13 +78,19 @@ class AbstractAnimator(metaclass=ABCMeta):
             self.img.set_data(X, Y)
             return [self.img]
 
-    def animate(self, num_frames=1000):
-        self.num_frames = num_frames
+    def animate(self, num_frames: int = 1000, fps: int = None, timespan: int = None):
+        self.fps = fps
+        self.timespan = timespan
+        if fps is not None and timespan is not None and timespan > 0 and fps > 0:
+            self.num_frames = fps * timespan
+            logger.info(f"Animating for {timespan} seconds")
+        else:
+            self.num_frames = num_frames
         plt.axis("off")
         self.anim = animation.FuncAnimation(
             self.fig,
             self._animate,
-            frames=num_frames,
+            frames=self.num_frames,
             interval=self.interval,
             blit=True,
             repeat=False,
@@ -123,6 +129,8 @@ class AbstractAnimator(metaclass=ABCMeta):
 
         # self.anim.save(filename, writer='imagemagick')
         logger.info(f"Saving {cname} to {filename}")
+        if self.fps is not None and self.fps > 0:
+            fps = self.fps
         writer = animation.writers["ffmpeg"](fps=fps)
         self.anim.save(filename, writer=writer, dpi=dpi)
         logger.debug(f"Time Taken = {time.time() - start} seconds")
